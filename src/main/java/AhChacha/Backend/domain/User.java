@@ -8,11 +8,10 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
-@Entity
-@Getter
+@Entity @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Table(name = "user")
 public class User {
 
     public static final String STATUS_ACTIVE = "active";
@@ -40,11 +39,11 @@ public class User {
     private String email;
 
     @Column(name="class", nullable = false)
+    @Enumerated(value = EnumType.STRING)
     private Classification classification;
 
     @Column(name="create_at", nullable = false)
-    @Builder.Default
-    private Timestamp createDate = new Timestamp(System.currentTimeMillis());
+    private Timestamp createDate;
 
     @Column(name= "status", nullable = false)
     @Builder.Default()
@@ -57,5 +56,12 @@ public class User {
 
     @Column(name="weight", nullable = false)
     private int weight;
+
+    @Column(name = "platform")
+    @Enumerated(value = EnumType.STRING)
+    private Platform platform;
+
+    @Column(name = "platform_id")
+    private Long platformId;
 
 }
