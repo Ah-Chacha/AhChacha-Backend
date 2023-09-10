@@ -27,5 +27,5 @@ public class Sleep {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User userId;
+    private Member memberId;
 }

@@ -24,7 +24,7 @@ public class Exercise {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User userId;
+    private Member memberId;
 
     @Column(name = "exercise_day", nullable = false)
     private Timestamp date;
