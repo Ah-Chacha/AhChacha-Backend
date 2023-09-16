@@ -38,7 +38,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             CustomOAuth2User customOAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
             if(customOAuth2User.getRoleType() == RoleType.GUEST) {
-                TokenDto tokenDto = tokenProvider.generateAccessToken(customOAuth2User.getEmail());
+                TokenDto tokenDto = tokenProvider.generateAccessToken(authentication);
                 RefreshToken refreshToken = RefreshToken.builder()
                         .key(customOAuth2User.getEmail())
                         .value(tokenDto.getRefreshToken())
@@ -54,7 +54,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 System.out.println("result = " + result);
 
             } else {
-                TokenDto tokenDto = loginSuccess(response, customOAuth2User);
+                TokenDto tokenDto = loginSuccess(response, customOAuth2User, authentication);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("utf-8");
 
@@ -68,9 +68,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     //dto를 리턴하고 싶은데... redirect를 여기서 하려면.. response 함수를 써야하는듯..
     @Transactional
-    private TokenDto loginSuccess(HttpServletResponse response, CustomOAuth2User customOAuth2User) throws IOException {
+    private TokenDto loginSuccess(HttpServletResponse response, CustomOAuth2User customOAuth2User, Authentication authentication) throws IOException {
         //refresh 토큰 확인?? or 로그인 시 마다 토큰 새로 발급?
-        TokenDto tokenDto = tokenProvider.generateAccessToken(customOAuth2User.getEmail());
+        TokenDto tokenDto = tokenProvider.generateAccessToken(authentication);
         RefreshToken refreshToken = RefreshToken.builder()
                 .key(customOAuth2User.getEmail())
                 .value(tokenDto.getRefreshToken())

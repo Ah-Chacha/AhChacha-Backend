@@ -43,16 +43,19 @@ public class TokenProvider {
 
 
 
-    public TokenDto generateAccessToken(String email) {
+    public TokenDto generateAccessToken(Authentication authentication) {
 
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
 
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
-                .setSubject(ACCESS_TOKEN_SUBJECT)       // payload "sub": "name"
-                .claim(EMAIL_CLAIM, email)        // payload "auth": "ROLE_USER"
+                .setSubject(authentication.getName())       // payload "sub": "name"
+                .claim(AUTHORITIES_KEY, authorities)        // payload "auth": "ROLE_USER"
                 .setExpiration(accessTokenExpiresIn)        // payload "exp": 1516239022 (예시)
                 .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512"
                 .compact();

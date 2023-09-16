@@ -16,6 +16,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
 
+    @Transactional
     public void signUp(SignUpDto signUpDto) throws Exception {
 
         //이메일 중첩 확인 등등 해야댐
