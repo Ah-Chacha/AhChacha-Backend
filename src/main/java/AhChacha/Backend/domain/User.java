@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 public class User {
 
     public static final String STATUS_ACTIVE = "active";
-    public static final String DEFAULT_PROFILE_ROOT = "/Users/lyouxsun/Desktop/LS/Backend/src/main/resources/picture/profileImage.png";
+    public static final String DEFAULT_PROFILE_ROOT = "profileImage.png";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,7 +29,6 @@ public class User {
     private String nickname;
 
     @Column(name = "profile_image", nullable = false)
-    @Builder.Default
     private String profileImage = DEFAULT_PROFILE_ROOT;
 
     @Column(name="phone_number", nullable = false)
@@ -46,7 +45,6 @@ public class User {
     private Timestamp createDate;
 
     @Column(name= "status", nullable = false)
-    @Builder.Default()
     private String status = STATUS_ACTIVE;
     @Column(name="login_id", nullable = false)
     private String loginId;
