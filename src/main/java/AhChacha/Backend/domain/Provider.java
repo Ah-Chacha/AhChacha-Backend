@@ -1,5 +1,5 @@
 package AhChacha.Backend.domain;
 
-public enum Platform {
+public enum Provider {
     KAKAO, GOOGLE
 }

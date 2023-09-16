@@ -15,48 +15,48 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="id", nullable = false)
+    @Column(name="id")
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "nickname", nullable = false)
+    @Column(name = "nickname")
     private String nickname;
 
-    @Column(name = "profile_image", nullable = false)
+    @Column(name = "profile_image")
     private String profileImage;
 
-    @Column(name="phone_number", nullable = false)
+    @Column(name="phone_number")
     private String phoneNumber;
 
-    @Column(name="email", nullable = false)
+    @Column(name="email")
     private String email;
 
-    @Column(name="class", nullable = false)
+    @Column(name="class")
     @Enumerated(value = EnumType.STRING)
     private Classification classification;
 
-    @Column(name="create_at", nullable = false)
+    @Column(name="create_at")
     private Timestamp createDate;
 
-    @Column(name= "status", nullable = false)
+    @Column(name= "status")
     private String status = STATUS_ACTIVE;
-    @Column(name="login_id", nullable = false)
+    @Column(name="login_id")
     private String loginId;
 
-    @Column(name="login_password", nullable = false)
+    @Column(name="login_password")
     private String loginPassword;
 
-    @Column(name="weight", nullable = false)
+    @Column(name="weight")
     private int weight;
 
     @Column(name = "platform")
     @Enumerated(value = EnumType.STRING)
-    private Platform platform;
+    private Provider provider;
 
     @Column(name = "platform_id")
-    private String platformId;
+    private String providerId;
 
     @Column(name = "role_type")
     @Enumerated(value = EnumType.STRING)
@@ -64,14 +64,15 @@ public class Member {
 
 
     @Builder
-    public Member(Platform platform, String loginId, String email, String nickname, String profileImage, String platformId, RoleType roleType) {
-        this.platform = platform;
+    public Member(String phoneNumber, Provider provider, String loginId, String email, String nickname, String profileImage, String providerId, RoleType roleType) {
+        this.provider = provider;
         this.loginId = loginId;
         this.email = email;
         this.nickname = nickname;
         this.profileImage = profileImage;
-        this.platformId = platformId;
+        this.providerId = providerId;
         this.roleType = roleType;
+        this.phoneNumber = phoneNumber;
     }
 
 
