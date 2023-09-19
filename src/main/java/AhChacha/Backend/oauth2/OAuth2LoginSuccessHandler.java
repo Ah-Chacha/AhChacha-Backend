@@ -1,6 +1,7 @@
 package AhChacha.Backend.oauth2;
 
 import AhChacha.Backend.controller.dto.TokenDto;
+import AhChacha.Backend.domain.Provider;
 import AhChacha.Backend.domain.RefreshToken;
 import AhChacha.Backend.domain.RoleType;
 import AhChacha.Backend.jwt.TokenProvider;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -30,6 +32,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    @Transactional
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("OAuth2 Login Success");
@@ -37,10 +40,11 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         try {
             CustomOAuth2User customOAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
+            System.out.println("authentication = " + authentication);
             if(customOAuth2User.getRoleType() == RoleType.GUEST) {
                 TokenDto tokenDto = tokenProvider.generateAccessToken(authentication);
                 RefreshToken refreshToken = RefreshToken.builder()
-                        .key(customOAuth2User.getEmail())
+                        .key(authentication.getName())
                         .value(tokenDto.getRefreshToken())
                         .build();
                 response.setContentType("application/json");
@@ -48,13 +52,16 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
                 String result = objectMapper.writeValueAsString(tokenDto);
 
-                response.sendRedirect("/auth/sign-up");
+                Provider provider = customOAuth2User.getProvider();
+                response.sendRedirect("/auth/sign-up/"+provider+"/"+authentication.getName());
+                //회원가입 화면으로 redirect
                 response.getWriter().write(result);
                 refreshTokenRepository.save(refreshToken);
                 System.out.println("result = " + result);
 
             } else {
                 TokenDto tokenDto = loginSuccess(response, customOAuth2User, authentication);
+                System.out.println("tokenDto = " + tokenDto);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("utf-8");
 
@@ -72,7 +79,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         //refresh 토큰 확인?? or 로그인 시 마다 토큰 새로 발급?
         TokenDto tokenDto = tokenProvider.generateAccessToken(authentication);
         RefreshToken refreshToken = RefreshToken.builder()
-                .key(customOAuth2User.getEmail())
+                .key(authentication.getName())   //refreshToken = platformId
                 .value(tokenDto.getRefreshToken())
                 .build();
         refreshTokenRepository.save(refreshToken);

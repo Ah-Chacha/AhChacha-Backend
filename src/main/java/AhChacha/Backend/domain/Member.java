@@ -18,6 +18,10 @@ public class Member {
     @Column(name="id")
     private Long id;
 
+    /*@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "rt_key")
+    private RefreshToken refreshToken;*/
+
     @Column(name = "name")
     private String name;
 

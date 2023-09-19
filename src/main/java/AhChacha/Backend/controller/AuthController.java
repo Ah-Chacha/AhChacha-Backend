@@ -1,6 +1,7 @@
 package AhChacha.Backend.controller;
 
 import AhChacha.Backend.controller.dto.SignUpDto;
+import AhChacha.Backend.domain.Provider;
 import AhChacha.Backend.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,9 +15,11 @@ public class AuthController {
 
     private final MemberService memberService;
 
-    @PostMapping("/sign-up")
-    public String signUp(@RequestBody SignUpDto signUpDto) throws Exception {
-        memberService.signUp(signUpDto);
+    @PostMapping("/sign-up/{provider}/{id}")
+    public String signUp(@PathVariable("provider") Provider provider, @PathVariable("id") String id, @RequestBody SignUpDto signUpDto) throws Exception {
+        memberService.signUp(signUpDto, provider, id);
+        System.out.println("provider = " + provider);
+        System.out.println("id = " + id);
         return "회원가입 성공";
     }
 

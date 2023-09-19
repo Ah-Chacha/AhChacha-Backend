@@ -44,9 +44,9 @@ public class OAuth2AttributesDto {
         return Member.builder()
                 .provider(provider)
                 .providerId(oAuth2UserInfo.getId())
-                .email(UUID.randomUUID() + "@socialUser.com")
                 .nickname(oAuth2UserInfo.getNickname())
                 .profileImage(oAuth2UserInfo.getProfileImageUrl())
+                .provider(provider)
                 .roleType(RoleType.GUEST)
                 .build();
     }

@@ -28,13 +28,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     private final MemberRepository memberRepository;
 
-    //private static final String GOOGLE = "google";
 
+    @Transactional
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         System.out.println("userRequest = " + userRequest);
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
+        System.out.println("In loadUser!!!!!!!!!!!!!!!!!");
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         Provider provider = getProvider(registrationId);
@@ -51,11 +52,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 Collections.singleton(new SimpleGrantedAuthority(createdMember.getRoleType().getKey())),
                 attributes,
                 extractAttributes.getNameAttributeKey(),
-                createdMember.getEmail(),
+                createdMember.getProvider(),
                 createdMember.getRoleType()
         );
     }
-
     private Member getMember(OAuth2AttributesDto extractAttributes, Provider provider) {
         Member findMember = memberRepository.findByProviderAndProviderId(provider,
                 extractAttributes.getOAuth2UserInfo().getId()).orElse(null);
