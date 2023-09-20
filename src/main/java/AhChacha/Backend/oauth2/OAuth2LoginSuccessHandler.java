@@ -17,10 +17,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @Service
 @Slf4j
@@ -28,7 +26,7 @@ import java.io.PrintWriter;
 @RequiredArgsConstructor
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -42,7 +40,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
             System.out.println("authentication = " + authentication);
             if(customOAuth2User.getRoleType() == RoleType.GUEST) {
-                TokenDto tokenDto = tokenProvider.generateAccessToken(authentication);
+                TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
                 RefreshToken refreshToken = RefreshToken.builder()
                         .key(authentication.getName())
                         .value(tokenDto.getRefreshToken())
@@ -54,6 +52,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
                 Provider provider = customOAuth2User.getProvider();
                 response.sendRedirect("/auth/sign-up/"+provider+"/"+authentication.getName());
+                System.out.println("/auth/sign-up/"+provider+"/"+authentication.getName());
                 //회원가입 화면으로 redirect
                 response.getWriter().write(result);
                 refreshTokenRepository.save(refreshToken);
@@ -77,7 +76,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Transactional
     private TokenDto loginSuccess(HttpServletResponse response, CustomOAuth2User customOAuth2User, Authentication authentication) throws IOException {
         //refresh 토큰 확인?? or 로그인 시 마다 토큰 새로 발급?
-        TokenDto tokenDto = tokenProvider.generateAccessToken(authentication);
+        TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
         RefreshToken refreshToken = RefreshToken.builder()
                 .key(authentication.getName())   //refreshToken = platformId
                 .value(tokenDto.getRefreshToken())
@@ -85,4 +84,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         refreshTokenRepository.save(refreshToken);
         return tokenDto;
     }
+
+
+
+
 }

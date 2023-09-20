@@ -1,5 +1,6 @@
 package AhChacha.Backend.domain;
 
+import AhChacha.Backend.converter.ProviderConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -56,7 +57,8 @@ public class Member {
     private int weight;
 
     @Column(name = "platform")
-    @Enumerated(value = EnumType.STRING)
+    //@Enumerated(value = EnumType.STRING)
+    @Convert(converter = ProviderConverter.class)
     private Provider provider;
 
     @Column(name = "platform_id")

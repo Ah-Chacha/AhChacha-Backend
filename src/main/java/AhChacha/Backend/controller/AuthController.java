@@ -1,10 +1,15 @@
 package AhChacha.Backend.controller;
 
 import AhChacha.Backend.controller.dto.SignUpDto;
+import AhChacha.Backend.controller.dto.TokenDto;
+import AhChacha.Backend.controller.dto.TokenRequestDto;
 import AhChacha.Backend.domain.Provider;
+import AhChacha.Backend.repository.MemberRepository;
+import AhChacha.Backend.service.CustomOAuth2UserService;
 import AhChacha.Backend.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -14,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final MemberService memberService;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final MemberRepository memberRepository;
 
     @PostMapping("/sign-up/{provider}/{id}")
     public String signUp(@PathVariable("provider") Provider provider, @PathVariable("id") String id, @RequestBody SignUpDto signUpDto) throws Exception {
@@ -33,4 +40,8 @@ public class AuthController {
     }*/
 
 
+    @PostMapping("/reissue")
+    public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
+        return ResponseEntity.ok(memberService.reissue(tokenRequestDto));
+    }
 }

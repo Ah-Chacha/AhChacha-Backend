@@ -43,7 +43,7 @@ public class TokenProvider {
 
 
 
-    public TokenDto generateAccessToken(Authentication authentication) {
+    public TokenDto generateTokenDto(Authentication authentication) {
 
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
