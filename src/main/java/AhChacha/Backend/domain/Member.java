@@ -1,18 +1,14 @@
 package AhChacha.Backend.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 
 @Entity @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "user")
-public class User {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "member")
+public class Member {
 
     public static final String STATUS_ACTIVE = "active";
     public static final String DEFAULT_PROFILE_ROOT = "profileImage.png";
@@ -29,7 +25,7 @@ public class User {
     private String nickname;
 
     @Column(name = "profile_image", nullable = false)
-    private String profileImage = DEFAULT_PROFILE_ROOT;
+    private String profileImage = "profileImage.png";
 
     @Column(name="phone_number", nullable = false)
     private String phoneNumber;
@@ -60,6 +56,23 @@ public class User {
     private Platform platform;
 
     @Column(name = "platform_id")
-    private Long platformId;
+    private String platformId;
+
+    @Column(name = "role_type")
+    @Enumerated(value = EnumType.STRING)
+    private RoleType roleType;
+
+
+    @Builder
+    public Member(Platform platform, String loginId, String email, String nickname, String profileImage, String platformId, RoleType roleType) {
+        this.platform = platform;
+        this.loginId = loginId;
+        this.email = email;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+        this.platformId = platformId;
+        this.roleType = roleType;
+    }
+
 
 }
