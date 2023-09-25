@@ -1,7 +1,7 @@
 package AhChacha.Backend.controller.dto;
 
 import AhChacha.Backend.domain.Member;
-import AhChacha.Backend.domain.Platform;
+import AhChacha.Backend.domain.Provider;
 import AhChacha.Backend.domain.RoleType;
 import AhChacha.Backend.oauth2.userinfo.GoogleOAuth2UserInfo;
 import AhChacha.Backend.oauth2.userinfo.OAuth2UserInfo;
@@ -23,27 +23,30 @@ public class OAuth2AttributesDto {
         this.oAuth2UserInfo = oAuth2UserInfo;
     }
 
-    public static OAuth2AttributesDto of(Platform platform, String userNameAttributeKey, Map<String, Object> attributes) {
+    public static OAuth2AttributesDto of(Provider provider, String userNameAttributeKey, Map<String, Object> attributes) {
         /*if (platform == Platform.GOOGLE) {
             return ofGoogle(userNameAttributeKey, attributes);
         }*/
+        System.out.println("platform = " + provider);
         return ofGoogle(userNameAttributeKey, attributes);
     }
 
     public static OAuth2AttributesDto ofGoogle(String userNameAttributeKey, Map<String, Object> attributes) {
+        System.out.println("userNameAttributeKey = " + userNameAttributeKey);
         return OAuth2AttributesDto.builder()
                 .nameAttributeKey(userNameAttributeKey)
                 .oAuth2UserInfo(new GoogleOAuth2UserInfo(attributes))
                 .build();
     }
 
-    public Member toMember(Platform platform, OAuth2UserInfo oAuth2UserInfo) {
+    public Member toMember(Provider provider, OAuth2UserInfo oAuth2UserInfo) {
+        System.out.println("platform = " + provider);
         return Member.builder()
-                .platform(platform)
-                .platformId(oAuth2UserInfo.getId())
-                .email(UUID.randomUUID() + "@socialUser.com")
+                .provider(provider)
+                .providerId(oAuth2UserInfo.getId())
                 .nickname(oAuth2UserInfo.getNickname())
                 .profileImage(oAuth2UserInfo.getProfileImageUrl())
+                .provider(provider)
                 .roleType(RoleType.GUEST)
                 .build();
     }

@@ -9,6 +9,7 @@ public class GoogleOAuth2UserInfo extends OAuth2UserInfo {
     }
     @Override
     public String getId() {
+        System.out.println("attributes = " + attributes);
         return (String) attributes.get("sub");
     }
 
