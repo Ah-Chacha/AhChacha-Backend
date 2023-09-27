@@ -7,6 +7,7 @@ import AhChacha.Backend.domain.Provider;
 import AhChacha.Backend.repository.MemberRepository;
 import AhChacha.Backend.service.CustomOAuth2UserService;
 import AhChacha.Backend.service.MemberService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +24,24 @@ public class AuthController {
     private final MemberRepository memberRepository;
 
     @PostMapping("/sign-up/{provider}/{id}")
-    public String signUp(@PathVariable("provider") Provider provider, @PathVariable("id") String id, @RequestBody SignUpDto signUpDto) throws Exception {
+    public ResponseEntity<TokenDto> signUp(@PathVariable("provider") Provider provider, @PathVariable("id") String id, @RequestBody SignUpDto signUpDto) throws Exception {
         memberService.signUp(signUpDto, provider, id);
         System.out.println("provider = " + provider);
         System.out.println("id = " + id);
+        return ResponseEntity.ok(memberService.signUp(signUpDto, provider, id));
+    }
+
+
+    @GetMapping("/sign-up/{provider}/{id}")
+    public String signUp1(@PathVariable("provider") Provider provider, @PathVariable("id") String id) throws Exception {
+        //memberService.signUp(signUpDto, provider, id);
+        System.out.println("provider = " + provider);
+        System.out.println("id = " + id);
+        TokenDto tokenDto;
+
         return "회원가입 성공";
     }
+
 
     /*@PostMapping("/login")
     public ResponseEntity<TokenDto> login()*/
