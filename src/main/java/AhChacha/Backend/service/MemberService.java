@@ -29,8 +29,20 @@ public class MemberService {
     private final TokenProvider tokenProvider;
 
 
+    //토큰 만료 시 처리에 관한 작업 필요함
+
+
     @Transactional
-    public void signUp(SignUpDto signUpDto, Provider provider, String id) throws Exception {
+    public TokenDto signUp(SignUpDto signUpDto, Provider provider, String id) throws Exception {
+
+        //JWT 발급
+        TokenDto tokenDto = tokenProvider.generateTokenDtoByAuthName(id);
+        RefreshToken refreshToken = RefreshToken.builder()
+                .key(id)
+                .value(tokenDto.getRefreshToken())
+                .build();
+        refreshTokenRepository.save(refreshToken);
+
 
         //이메일 중첩 확인 등등 해야댐
 
@@ -58,10 +70,13 @@ public class MemberService {
 
         //memberRepository.findByProviderAndProviderId()
 
+        return tokenDto;
+
     }
 
+
     @Transactional
-    public TokenDto reissue(TokenRequestDto tokenRequestDto) {
+    public TokenDto reissue(TokenRequestDto tokenRequestDto) {    //토큰 재발급
         // 1. Refresh Token 검증
         if (!tokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
             throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
