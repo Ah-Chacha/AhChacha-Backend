@@ -18,6 +18,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByProviderAndProviderId(Provider provider, String providerId);
 
+    Optional<Member> findByProviderId(String providerId);
+
 
     //ENUM TYPE이 문제다 ...... ㅜ
     //ENUM 끼면 걍 ㅅ 발 의존성 주입이 안되요 시ㅣㅣ발 ㅜㅜㅜㅜ

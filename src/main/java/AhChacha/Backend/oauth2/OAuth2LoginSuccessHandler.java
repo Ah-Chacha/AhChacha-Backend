@@ -22,11 +22,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 
+
 @Service
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
+
 
 
     // 클라이언트에서 로그인 완료 이후 authentication 인증 이후 access token 까지 발급 받아야 함 !!!!!!!!!!
@@ -60,6 +62,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
                 //JWT 토큰발급은 추가 정보 입력 폼 이후로
                 //authentication 을 인자로 넘길 수가 있나..
+
 
 
                 Provider provider = customOAuth2User.getProvider();
@@ -100,3 +103,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
 
 }
+
+
+
+
