@@ -1,10 +1,14 @@
 package AhChacha.Backend.controller;
 
+import AhChacha.Backend.controller.dto.OAuth2TokenRequestDto;
 import AhChacha.Backend.controller.dto.SignUpDto;
 import AhChacha.Backend.controller.dto.TokenDto;
 import AhChacha.Backend.controller.dto.TokenRequestDto;
 import AhChacha.Backend.domain.Provider;
 import AhChacha.Backend.repository.MemberRepository;
+//import AhChacha.Backend.service.CustomOAuth2UserService;
+//import AhChacha.Backend.service.CustomOAuth2UserService;
+//import AhChacha.Backend.service.CustomOAuth2UserService;
 import AhChacha.Backend.service.CustomOAuth2UserService;
 import AhChacha.Backend.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +26,45 @@ public class AuthController {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final MemberRepository memberRepository;
 
+
+
+
+
+    //FE에서 AccessToken넘김
+    @PostMapping("/token")
+    public ResponseEntity<TokenDto> getAccessToken(@RequestBody OAuth2TokenRequestDto oAuth2TokenRequestDto) {
+        String accessToken = oAuth2TokenRequestDto.getOAuth2AccessToken();
+        System.out.println("accessToken = " + accessToken);
+        //memberService.requestUserInfo(accessToken);
+        return ResponseEntity.ok(memberService.requestUserInfo(accessToken));
+    }
+
+
+    /*@PostMapping("/signup/social")
+    public ResponseEntity<TokenDto> socialSignUp(@RequestBody SignUpDto signUpDto) {
+        return ResponseEntity.ok(memberService.socialSignUp(signUpDto));
+    }*/
+
+
     @PostMapping("/sign-up/{provider}/{id}")
     public String signUp(@PathVariable("provider") Provider provider, @PathVariable("id") String id, @RequestBody SignUpDto signUpDto) throws Exception {
         memberService.signUp(signUpDto, provider, id);
         System.out.println("provider = " + provider);
         System.out.println("id = " + id);
+        return "추가정보 입력 성공";
+    }
+
+
+    @GetMapping("/sign-up/{provider}/{id}")
+    public String signUp1(@PathVariable("provider") Provider provider, @PathVariable("id") String id) throws Exception {
+        //memberService.signUp(signUpDto, provider, id);
+        System.out.println("provider = " + provider);
+        System.out.println("id = " + id);
+        TokenDto tokenDto;
+
         return "회원가입 성공";
     }
+
 
     /*@PostMapping("/login")
     public ResponseEntity<TokenDto> login()*/

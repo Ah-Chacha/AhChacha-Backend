@@ -2,6 +2,7 @@ package AhChacha.Backend.jwt;
 
 
 import AhChacha.Backend.controller.dto.TokenDto;
+import AhChacha.Backend.domain.Provider;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -42,12 +43,46 @@ public class TokenProvider {
     }
 
 
+    public TokenDto generateTokenDtoByAuthName(String name, Provider provider) {
+        long now = (new Date()).getTime();
+
+        // Access Token 생성
+        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        String accessToken = Jwts.builder()
+                .setSubject(name)       // payload "sub": "name"
+                .claim(AUTHORITIES_KEY, "USER")        // payload "auth": "ROLE_USER"
+                .setExpiration(accessTokenExpiresIn)        // payload "exp": 1516239022 (예시)
+                .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512"
+                .compact();
+
+
+        // Refresh Token 생성
+        String refreshToken = Jwts.builder()
+                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+
+        return TokenDto.builder()
+                .grantType(BEARER_TYPE)
+                .accessToken(accessToken)
+                .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
+                .refreshToken(refreshToken)
+                .provider(provider)
+                .id(name)
+                .build();
+
+    }
+
+
 
     public TokenDto generateTokenDto(Authentication authentication) {
 
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
+
+        System.out.println("authorities = " + authorities);
+        System.out.println("!@!#$!$$@#@##@@authentication = !!!!" + authentication.getName());
 
         long now = (new Date()).getTime();
 
@@ -74,6 +109,45 @@ public class TokenProvider {
                 .refreshToken(refreshToken)
                 .build();
     }
+
+
+
+    /*public TokenDto generateTokenDto(Authentication authentication, Provider provider) {
+
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        System.out.println("authorities = " + authorities);
+        System.out.println("!@!#$!$$@#@##@@authentication = !!!!" + authentication.getName());
+
+        long now = (new Date()).getTime();
+
+        // Access Token 생성
+        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        String accessToken = Jwts.builder()
+                .setSubject(authentication.getName())       // payload "sub": "name"
+                .claim(AUTHORITIES_KEY, authorities)        // payload "auth": "ROLE_USER"
+                .setExpiration(accessTokenExpiresIn)        // payload "exp": 1516239022 (예시)
+                .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512"
+                .compact();
+
+
+        // Refresh Token 생성
+        String refreshToken = Jwts.builder()
+                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+
+        return TokenDto.builder()
+                .grantType(BEARER_TYPE)
+                .accessToken(accessToken)
+                .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
+                .refreshToken(refreshToken)
+                .provider(provider)
+                .id(id)
+                .build();
+    }*/
 
     public Authentication getAuthentication(String accessToken) {
         // 토큰 복호화

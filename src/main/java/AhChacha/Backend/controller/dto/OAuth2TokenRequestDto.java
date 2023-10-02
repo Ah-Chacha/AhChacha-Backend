@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TokenDto {
+public class OAuth2TokenRequestDto {
+    private String access_token;
 
-    private String grantType;
-    private String accessToken;
-    private String refreshToken;
-    private Long accessTokenExpiresIn;
-    private String id;
-    private Provider provider;
+    public String getOAuth2AccessToken() {
+        return access_token;
+    }
+
+
 }
