@@ -19,12 +19,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
+
 
 @Service
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
+
+
+
+    // 클라이언트에서 로그인 완료 이후 authentication 인증 이후 access token 까지 발급 받아야 함 !!!!!!!!!!
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final TokenProvider tokenProvider;
@@ -40,7 +47,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
             System.out.println("authentication = " + authentication);
             if(customOAuth2User.getRoleType() == RoleType.GUEST) {
-                TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
+                /*TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
                 RefreshToken refreshToken = RefreshToken.builder()
                         .key(authentication.getName())
                         .value(tokenDto.getRefreshToken())
@@ -48,15 +55,22 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 response.setContentType("application/json");
                 response.setCharacterEncoding("utf-8");
 
+
                 String result = objectMapper.writeValueAsString(tokenDto);
+                response.getWriter().write(result);*/
+
+
+                //JWT 토큰발급은 추가 정보 입력 폼 이후로
+                //authentication 을 인자로 넘길 수가 있나..
+
+
 
                 Provider provider = customOAuth2User.getProvider();
                 response.sendRedirect("/auth/sign-up/"+provider+"/"+authentication.getName());
                 System.out.println("/auth/sign-up/"+provider+"/"+authentication.getName());
                 //회원가입 화면으로 redirect
-                response.getWriter().write(result);
-                refreshTokenRepository.save(refreshToken);
-                System.out.println("result = " + result);
+                //refreshTokenRepository.save(refreshToken);
+                //System.out.println("result = " + result);
 
             } else {
                 TokenDto tokenDto = loginSuccess(response, customOAuth2User, authentication);
@@ -89,3 +103,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
 
 }
+
+
+
+

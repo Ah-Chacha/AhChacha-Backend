@@ -7,6 +7,7 @@ import AhChacha.Backend.jwt.TokenProvider;
 import AhChacha.Backend.oauth2.OAuth2LoginFailureHandler;
 import AhChacha.Backend.oauth2.OAuth2LoginSuccessHandler;
 import AhChacha.Backend.repository.MemberRepository;
+//import AhChacha.Backend.service.CustomOAuth2UserService;
 import AhChacha.Backend.service.CustomOAuth2UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +71,7 @@ public class SecurityConfig {
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/","/css/**","/images/**","/js/**","/favicon.ico","/h2-console/**").permitAll()
                         .requestMatchers("/api/member/sign-up").permitAll() // 회원가입 접근 가능
+                        .requestMatchers("/auth/token").permitAll()
                         .anyRequest().permitAll()) // 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
                 //== 소셜 로그인 설정 ==//
                 .oauth2Login(oauth2 -> oauth2
