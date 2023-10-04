@@ -43,7 +43,7 @@ jobs:
       - name: create application.yml
         if: contains(github.ref, 'main') || contains(github.ref, 'feat/cicd')
         run: |
-          mkdir ./src/main/resources
+          mkdir -p ./src/main/resources
           cd ./src/main/resources
           touch ./application.yml
           echo "${{ secrets.PROPERTIES_PROD }}" > ./application.yml
