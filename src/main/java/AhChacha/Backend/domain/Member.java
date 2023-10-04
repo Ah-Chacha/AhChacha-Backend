@@ -70,7 +70,7 @@ public class Member {
 
 
     @Builder
-    public Member(String phoneNumber, Provider provider, String loginId, String email, String nickname, String profileImage, String providerId, RoleType roleType) {
+    public Member(String loginPassword, String phoneNumber, Provider provider, String loginId, String email, String nickname, String profileImage, String providerId, RoleType roleType) {
         this.provider = provider;
         this.loginId = loginId;
         this.email = email;
@@ -79,6 +79,7 @@ public class Member {
         this.providerId = providerId;
         this.roleType = roleType;
         this.phoneNumber = phoneNumber;
+        this.loginPassword = loginPassword;
     }
 
 

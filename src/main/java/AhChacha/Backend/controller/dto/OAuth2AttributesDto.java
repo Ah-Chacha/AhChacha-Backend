@@ -31,6 +31,7 @@ public class OAuth2AttributesDto {
         return ofGoogle(userNameAttributeKey, attributes);
     }
 
+
     public static OAuth2AttributesDto ofGoogle(String userNameAttributeKey, Map<String, Object> attributes) {
         System.out.println("userNameAttributeKey = " + userNameAttributeKey);
         return OAuth2AttributesDto.builder()

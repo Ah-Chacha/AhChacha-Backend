@@ -1,9 +1,6 @@
 package AhChacha.Backend.controller;
 
-import AhChacha.Backend.controller.dto.OAuth2TokenRequestDto;
-import AhChacha.Backend.controller.dto.SignUpDto;
-import AhChacha.Backend.controller.dto.TokenDto;
-import AhChacha.Backend.controller.dto.TokenRequestDto;
+import AhChacha.Backend.controller.dto.*;
 import AhChacha.Backend.domain.Provider;
 import AhChacha.Backend.repository.MemberRepository;
 //import AhChacha.Backend.service.CustomOAuth2UserService;
@@ -37,6 +34,18 @@ public class AuthController {
         System.out.println("accessToken = " + accessToken);
         //memberService.requestUserInfo(accessToken);
         return ResponseEntity.ok(memberService.requestUserInfo(accessToken));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<TokenDto> login(@RequestBody MemberRequestDto memberRequestDto) {
+        return ResponseEntity.ok(memberService.login(memberRequestDto));
+    }
+
+
+    @PostMapping("/sign-up/general")
+    public String signUpWithEmail(@RequestBody GeneralSignUpDto generalSignUpDto) {
+        memberService.signUpWithEmail(generalSignUpDto);
+        return "회원가입 성공";
     }
 
 
