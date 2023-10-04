@@ -19,6 +19,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByProviderAndProviderId(Provider provider, String providerId);
 
     Optional<Member> findByProviderId(String providerId);
+    boolean existsByEmail(String email);
 
 
     //ENUM TYPE이 문제다 ...... ㅜ
