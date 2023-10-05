@@ -43,9 +43,8 @@ public class AuthController {
 
 
     @PostMapping("/sign-up/general")
-    public String signUpWithEmail(@RequestBody GeneralSignUpDto generalSignUpDto) {
-        memberService.signUpWithEmail(generalSignUpDto);
-        return "회원가입 성공";
+    public ResponseEntity<SignUpResponseDto> signUpWithEmail(@RequestBody GeneralSignUpDto generalSignUpDto) {
+        return ResponseEntity.ok(memberService.signUpWithEmail(generalSignUpDto));
     }
 
 
@@ -56,11 +55,10 @@ public class AuthController {
 
 
     @PostMapping("/sign-up/{provider}/{id}")
-    public String signUp(@PathVariable("provider") Provider provider, @PathVariable("id") String id, @RequestBody SignUpDto signUpDto) throws Exception {
-        memberService.signUp(signUpDto, provider, id);
+    public ResponseEntity<SignUpResponseDto> signUp(@PathVariable("provider") Provider provider, @PathVariable("id") String id, @RequestBody SignUpDto signUpDto) throws Exception {
         System.out.println("provider = " + provider);
         System.out.println("id = " + id);
-        return "추가정보 입력 성공";
+        return ResponseEntity.ok(memberService.signUp(signUpDto, provider, id));
     }
 
 

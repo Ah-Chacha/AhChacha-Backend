@@ -18,4 +18,5 @@ public class TokenDto {
     private Long accessTokenExpiresIn;
     private String id;
     private Provider provider;
+    private Long member_id;
 }

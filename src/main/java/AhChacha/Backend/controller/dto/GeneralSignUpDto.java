@@ -1,6 +1,7 @@
 package AhChacha.Backend.controller.dto;
 
 
+import AhChacha.Backend.domain.Gender;
 import AhChacha.Backend.domain.Member;
 import AhChacha.Backend.domain.RoleType;
 import lombok.AllArgsConstructor;
@@ -16,16 +17,20 @@ public class GeneralSignUpDto {
 
     private String email;
     private String password;
-    private String phoneNumber;
-    private String nickname;
+    private int age;
+    private int weight;
+    private int height;
+    private Gender gender;
 
 
     public Member toMember(PasswordEncoder passwordEncoder) {
         return Member.builder()
                 .email(email)
                 .loginPassword(password)
-                .phoneNumber(phoneNumber)
-                .nickname(nickname)
+                .age(age)
+                .weight(weight)
+                .height(height)
+                .gender(gender)
                 .roleType(RoleType.USER)
                 .build();
     }
