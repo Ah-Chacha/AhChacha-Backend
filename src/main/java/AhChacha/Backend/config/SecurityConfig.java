@@ -7,17 +7,11 @@ import AhChacha.Backend.jwt.TokenProvider;
 import AhChacha.Backend.oauth2.OAuth2LoginFailureHandler;
 import AhChacha.Backend.oauth2.OAuth2LoginSuccessHandler;
 import AhChacha.Backend.repository.MemberRepository;
-//import AhChacha.Backend.service.CustomOAuth2UserService;
 import AhChacha.Backend.service.CustomOAuth2UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.antlr.v4.runtime.Token;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -67,8 +61,8 @@ public class SecurityConfig {
                 //== URL별 권한 관리 옵션 ==//
                 .authorizeHttpRequests(authorize -> authorize
 
-                // 아이콘, css, js 관련
-                // 기본 페이지, css, image, js 하위 폴더에 있는 자료들은 모두 접근 가능, h2-console에 접근 가능
+                        // 아이콘, css, js 관련
+                        // 기본 페이지, css, image, js 하위 폴더에 있는 자료들은 모두 접근 가능, h2-console에 접근 가능
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/","/css/**","/images/**","/js/**","/favicon.ico","/h2-console/**").permitAll()
                         .requestMatchers("/api/member/sign-up").permitAll() // 회원가입 접근 가능
