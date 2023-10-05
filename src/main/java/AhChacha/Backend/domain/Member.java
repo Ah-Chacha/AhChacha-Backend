@@ -56,6 +56,15 @@ public class Member {
     @Column(name="weight")
     private int weight;
 
+    @Column(name = "age")
+    private int age;
+    @Column(name = "height")
+    private int height;
+
+    @Column(name = "gender")
+    @Enumerated(value = EnumType.STRING)
+    private Gender gender;
+
     @Column(name = "platform")
     //@Enumerated(value = EnumType.STRING)
     @Convert(converter = ProviderConverter.class)
@@ -70,7 +79,7 @@ public class Member {
 
 
     @Builder
-    public Member(String loginPassword, String phoneNumber, Provider provider, String loginId, String email, String nickname, String profileImage, String providerId, RoleType roleType) {
+    public Member(String loginPassword, int age, int height, int weight, Gender gender, Provider provider, String loginId, String email, String nickname, String profileImage, String providerId, RoleType roleType) {
         this.provider = provider;
         this.loginId = loginId;
         this.email = email;
@@ -78,7 +87,10 @@ public class Member {
         this.profileImage = profileImage;
         this.providerId = providerId;
         this.roleType = roleType;
-        this.phoneNumber = phoneNumber;
+        this.age = age;
+        this.gender = gender;
+        this.height = height;
+        this.weight = weight;
         this.loginPassword = loginPassword;
     }
 

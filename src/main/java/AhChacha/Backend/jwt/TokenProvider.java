@@ -43,7 +43,7 @@ public class TokenProvider {
     }
 
 
-    public TokenDto generateTokenDtoByAuthName(String name, Provider provider) {
+    public TokenDto generateTokenDtoByAuthName(String name, Provider provider, Long memberId) {
         long now = (new Date()).getTime();
 
         // Access Token 생성
@@ -69,6 +69,7 @@ public class TokenProvider {
                 .refreshToken(refreshToken)
                 .provider(provider)
                 .id(name)
+                .member_id(memberId)
                 .build();
 
     }

@@ -1,6 +1,7 @@
 package AhChacha.Backend.repository;
 
 
+import AhChacha.Backend.domain.Gender;
 import AhChacha.Backend.domain.Member;
 import AhChacha.Backend.domain.Provider;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +17,7 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
 
+
     Optional<Member> findByProviderAndProviderId(Provider provider, String providerId);
 
     Optional<Member> findByProviderId(String providerId);
@@ -25,7 +27,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     //ENUM TYPE이 문제다 ...... ㅜ
     //ENUM 끼면 걍 ㅅ 발 의존성 주입이 안되요 시ㅣㅣ발 ㅜㅜㅜㅜ
     @Modifying
-    @Query(value = "update member set email = :email, phone_number = :phoneNumber, role_type = 'USER' where platform = :provider and platform_id = :id", nativeQuery = true)
-    void updateMember(@Param("email") String email, @Param("phoneNumber") String phoneNumber, @Param("provider") String provider, @Param("id") String id);
+    @Query(value = "update member set age = :age, height = :height, gender = :gender, weight = :weight, role_type = 'USER' where platform = :provider and platform_id = :id", nativeQuery = true)
+    void updateMember(@Param("age") int age, @Param("height") int height, @Param("gender") String gender, @Param("weight") int weight, @Param("provider") String provider, @Param("id") String id);
 
 }

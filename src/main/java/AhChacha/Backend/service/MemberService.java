@@ -1,10 +1,7 @@
 package AhChacha.Backend.service;
 
 import AhChacha.Backend.controller.dto.*;
-import AhChacha.Backend.domain.Member;
-import AhChacha.Backend.domain.Provider;
-import AhChacha.Backend.domain.RefreshToken;
-import AhChacha.Backend.domain.RoleType;
+import AhChacha.Backend.domain.*;
 import AhChacha.Backend.jwt.TokenProvider;
 import AhChacha.Backend.repository.MemberRepository;
 import AhChacha.Backend.repository.RefreshTokenRepository;
@@ -78,13 +75,23 @@ public class MemberService {
             String picture = (String) jsonObject.get("picture");
             System.out.println("id = " + id);
             if(memberRepository.findByProviderId(id).isPresent()) {
-                TokenDto tokenDto = tokenProvider.generateTokenDtoByAuthName(id, Provider.GOOGLE);
-                RefreshToken refreshToken = RefreshToken.builder()
-                        .key(id)
-                        .value(tokenDto.getRefreshToken())
-                        .build();
-                refreshTokenRepository.save(refreshToken);
-                return tokenDto;
+                Optional<Member> member1 = memberRepository.findByProviderId(id);
+                if(member1.isPresent()) {
+                    Member member2 = member1.get();
+                    TokenDto tokenDto = tokenProvider.generateTokenDtoByAuthName(id, Provider.GOOGLE, member2.getId());
+                    RefreshToken refreshToken = RefreshToken.builder()
+                            .key(id)
+                            .value(tokenDto.getRefreshToken())
+                            .build();
+                    refreshTokenRepository.save(refreshToken);
+                    return tokenDto;
+                } else {
+                    try {
+                        throw new Exception();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
             else {
                 Member member = Member.builder()     //처음
@@ -95,7 +102,7 @@ public class MemberService {
                         .roleType(RoleType.GUEST)
                         .build();
                 memberRepository.save(member);
-                TokenDto tokenDto = tokenProvider.generateTokenDtoByAuthName(id, Provider.GOOGLE);
+                TokenDto tokenDto = tokenProvider.generateTokenDtoByAuthName(id, Provider.GOOGLE, member.getId());
                 RefreshToken refreshToken = RefreshToken.builder()
                         .key(id)
                         .value(tokenDto.getRefreshToken())
@@ -110,7 +117,7 @@ public class MemberService {
 
 
     @Transactional
-    public String signUp(SignUpDto signUpDto, Provider provider, String id) throws Exception {
+    public SignUpResponseDto signUp(SignUpDto signUpDto, Provider provider, String id) throws Exception {
 
         /*
         //JWT 발급
@@ -126,7 +133,36 @@ public class MemberService {
 
         Optional<Member> member = memberRepository.findByProviderAndProviderId(provider, id);
 
-        String provider_to_string = "";
+        if(member.isPresent()) {
+            Member member1 = member.get();
+            String provider_to_string = "";
+
+            if(provider.toString().equals("GOOGLE")) {
+                provider_to_string = "GOOGLE";
+            } else if (provider.toString().equals("KAKAO")) {
+                provider_to_string = "KAKAO";
+            }
+
+            String gender_to_string = "";
+            if(signUpDto.getGender().toString().equals("MAN")) {
+                gender_to_string = "MAN";
+            } else if (signUpDto.getGender().toString().equals("WOMAN")) {
+                gender_to_string = "WOMAN";
+            }
+
+            memberRepository.updateMember(signUpDto.getAge(), signUpDto.getHeight(), gender_to_string, signUpDto.getWeight(), provider_to_string, id);
+
+
+            return SignUpResponseDto.of(member1);
+        } else {
+            try {
+                throw new Exception();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        /*String provider_to_string = "";
 
         if(provider.toString().equals("GOOGLE")) {
             provider_to_string = "GOOGLE";
@@ -134,8 +170,15 @@ public class MemberService {
             provider_to_string = "KAKAO";
         }
 
-        memberRepository.updateMember(signUpDto.getEmail(), signUpDto.getPhoneNumber(), provider_to_string, id);
-        System.out.println("signUpDto = " + signUpDto.getPhoneNumber());
+        String gender_to_string = "";
+        if(signUpDto.getGender().toString().equals("MAN")) {
+            gender_to_string = "MAN";
+        } else if (signUpDto.getGender().toString().equals("WOMAN")) {
+            gender_to_string = "WOMAN";
+        }
+
+        memberRepository.updateMember(signUpDto.getAge(), signUpDto.getHeight(), gender_to_string, signUpDto.getWeight(), provider_to_string, id);
+        //System.out.println("signUpDto = " + signUpDto.getPhoneNumber());
 
 
         /*Member member = Member.builder()
@@ -148,7 +191,7 @@ public class MemberService {
 
         //memberRepository.findByProviderAndProviderId()
 
-        return "추가정보입력 성공";
+        //return null;
 
     }
 
@@ -207,14 +250,14 @@ public class MemberService {
     }
 
     @Transactional
-    public String signUpWithEmail(GeneralSignUpDto generalSignUpDto) {
+    public SignUpResponseDto signUpWithEmail(GeneralSignUpDto generalSignUpDto) {
         if(memberRepository.existsByEmail(generalSignUpDto.getEmail())) {
             throw new RuntimeException("이미 가입된 사용자입니다.");
         }
 
         Member member = generalSignUpDto.toMember(passwordEncoder);
 
-        return "회원가입";
+        return SignUpResponseDto.of(memberRepository.save(member));
     }
 
     /*public TokenDto socialSignUp(SignUpDto signUpDto) {
