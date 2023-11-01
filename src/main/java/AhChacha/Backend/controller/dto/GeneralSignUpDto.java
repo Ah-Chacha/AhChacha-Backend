@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.sql.Timestamp;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,6 +26,7 @@ public class GeneralSignUpDto {
 
 
     public Member toMember(PasswordEncoder passwordEncoder) {
+        Timestamp createTime = new Timestamp(System.currentTimeMillis());
         return Member.builder()
                 .email(email)
                 .loginPassword(password)
@@ -32,6 +35,7 @@ public class GeneralSignUpDto {
                 .height(height)
                 .gender(gender)
                 .roleType(RoleType.USER)
+                .createDate(createTime)
                 .build();
     }
 
