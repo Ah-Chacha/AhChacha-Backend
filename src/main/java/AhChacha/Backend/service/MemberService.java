@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -94,12 +95,14 @@ public class MemberService {
                 }
             }
             else {
+                Timestamp createTime = new Timestamp(System.currentTimeMillis());
                 Member member = Member.builder()     //처음
                         .nickname(name)
                         .provider(Provider.GOOGLE)
                         .providerId(id)
                         .profileImage(picture)
                         .roleType(RoleType.GUEST)
+                        .createDate(createTime)
                         .build();
                 memberRepository.save(member);
                 TokenDto tokenDto = tokenProvider.generateTokenDtoByAuthName(id, Provider.GOOGLE, member.getId());

@@ -79,7 +79,7 @@ public class Member {
 
 
     @Builder
-    public Member(String loginPassword, int age, int height, int weight, Gender gender, Provider provider, String loginId, String email, String nickname, String profileImage, String providerId, RoleType roleType) {
+    public Member(Timestamp createDate, String loginPassword, int age, int height, int weight, Gender gender, Provider provider, String loginId, String email, String nickname, String profileImage, String providerId, RoleType roleType) {
         this.provider = provider;
         this.loginId = loginId;
         this.email = email;
@@ -92,6 +92,7 @@ public class Member {
         this.height = height;
         this.weight = weight;
         this.loginPassword = loginPassword;
+        this.createDate = createDate;
     }
 
 
