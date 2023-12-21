@@ -1,4 +1,4 @@
-package AhChacha.Backend.controller.dto;
+package AhChacha.Backend.dto;
 
 import AhChacha.Backend.domain.Gender;
 import lombok.AllArgsConstructor;

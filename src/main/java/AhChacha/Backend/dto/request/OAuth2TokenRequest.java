@@ -1,6 +1,5 @@
-package AhChacha.Backend.controller.dto;
+package AhChacha.Backend.dto.request;
 
-import AhChacha.Backend.domain.Provider;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OAuth2TokenRequestDto {
+public class OAuth2TokenRequest {
     private String access_token;
 
     public String getOAuth2AccessToken() {

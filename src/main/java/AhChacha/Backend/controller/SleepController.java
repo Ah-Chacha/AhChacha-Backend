@@ -2,11 +2,13 @@ package AhChacha.Backend.controller;
 
 
 
-import AhChacha.Backend.controller.dto.SleepInputDto;
+import AhChacha.Backend.dto.request.SleepRequest;
 import AhChacha.Backend.service.MemberService;
 import AhChacha.Backend.service.SleepService;
+import AhChacha.Backend.dto.response.SleepResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -19,10 +21,10 @@ public class SleepController {
 
     private final MemberService memberService;
 
-    @PostMapping("/input")
-    public String inputSleep(@RequestBody SleepInputDto sleepInputDto, @RequestParam("memberId") Long id) {
-        System.out.println("sleepInputDto = " + sleepInputDto);
-        sleepService.inputSleepData(sleepInputDto, id);
-        return "수면데이터 입력";
+    @PostMapping("/{memberId}")
+    public ResponseEntity<SleepResponse> createSleep(@RequestBody SleepRequest sleepRequest, @PathVariable(value = "memberId") Long id) {
+        log.info("[SleepController.createSleep]");
+        SleepResponse response = sleepService.createSleep(sleepRequest, id);
+        return ResponseEntity.ok(response);
     }
 }

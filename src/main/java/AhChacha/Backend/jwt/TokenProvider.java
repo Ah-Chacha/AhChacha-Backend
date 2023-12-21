@@ -1,7 +1,7 @@
 package AhChacha.Backend.jwt;
 
 
-import AhChacha.Backend.controller.dto.TokenDto;
+import AhChacha.Backend.dto.response.TokenResponse;
 import AhChacha.Backend.domain.Provider;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -43,7 +43,7 @@ public class TokenProvider {
     }
 
 
-    public TokenDto generateTokenDtoByAuthName(String name, Provider provider, Long memberId) {
+    public TokenResponse generateTokenDtoByAuthName(String name, Provider provider, Long memberId) {
         long now = (new Date()).getTime();
 
         // Access Token 생성
@@ -62,7 +62,7 @@ public class TokenProvider {
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
-        return TokenDto.builder()
+        return TokenResponse.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
                 .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
@@ -76,7 +76,7 @@ public class TokenProvider {
 
 
 
-    public TokenDto generateTokenDto(Authentication authentication) {
+    public TokenResponse generateTokenDto(Authentication authentication) {
 
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -103,7 +103,7 @@ public class TokenProvider {
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
-        return TokenDto.builder()
+        return TokenResponse.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
                 .accessTokenExpiresIn(accessTokenExpiresIn.getTime())

@@ -1,4 +1,4 @@
-package AhChacha.Backend.controller.dto;
+package AhChacha.Backend.dto.request;
 
 
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberRequestDto {
+public class LoginRequest {
     private String email;
     private String password;
 

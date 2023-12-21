@@ -1,4 +1,4 @@
-package AhChacha.Backend.controller.dto;
+package AhChacha.Backend.dto.response;
 
 import AhChacha.Backend.domain.Member;
 import lombok.AllArgsConstructor;
@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpResponseDto {
+public class SignUpResponse {
     private Long id;
 
-    public static SignUpResponseDto of(Member member) {
-        return new SignUpResponseDto(member.getId());
+    public static SignUpResponse of(Member member) {
+        return new SignUpResponse(member.getId());
     }
 }

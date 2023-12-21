@@ -22,10 +22,11 @@ public class Exercise {
     @Column(name = "exercise_type", nullable = false)
     private String type;
 
+    @Column(name = "exercise_day", nullable = false)
+    private Timestamp date;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Member memberId;
 
-    @Column(name = "exercise_day", nullable = false)
-    private Timestamp date;
 }

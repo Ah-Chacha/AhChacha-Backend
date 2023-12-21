@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Entity @Getter
 @NoArgsConstructor
 @Table(name = "sleep")
@@ -15,19 +17,10 @@ public class Sleep {
     private Long id;
 
     @Column(name = "start_time", nullable = false)
-    private int startTime;
+    private Timestamp startTime;
 
     @Column(name = "end_time", nullable = false)
-    private int endTime;
-
-    @Column(name = "sleep_length")
-    private int sleep_length;
-
-    @Column(name = "rem")
-    private int rem;
-
-    @Column(name = "sleep_day")
-    private int date;
+    private Timestamp endTime;
 
     @Column(name = "quality_level", nullable = false)
     private int quality;
@@ -38,12 +31,9 @@ public class Sleep {
 
 
     @Builder
-    public Sleep(Member memberId, int startTime, int endTime, int sleep_length, int rem, int date, int quality) {
+    public Sleep(Member memberId, Timestamp startTime, Timestamp endTime,int quality) {
         this.startTime = startTime;
         this.endTime = endTime;
-        this.sleep_length= sleep_length;
-        this.rem = rem;
-        this.date = date;
         this.quality = quality;
         this.memberId = memberId;
     }

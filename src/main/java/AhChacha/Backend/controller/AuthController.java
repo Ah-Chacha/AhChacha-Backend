@@ -1,13 +1,17 @@
 package AhChacha.Backend.controller;
 
-import AhChacha.Backend.controller.dto.*;
+
 import AhChacha.Backend.domain.Provider;
 import AhChacha.Backend.repository.MemberRepository;
-//import AhChacha.Backend.service.CustomOAuth2UserService;
-//import AhChacha.Backend.service.CustomOAuth2UserService;
-//import AhChacha.Backend.service.CustomOAuth2UserService;
 import AhChacha.Backend.service.CustomOAuth2UserService;
 import AhChacha.Backend.service.MemberService;
+import AhChacha.Backend.dto.SignUpDto;
+import AhChacha.Backend.dto.request.LoginRequest;
+import AhChacha.Backend.dto.request.OAuth2TokenRequest;
+import AhChacha.Backend.dto.request.SignUpRequest;
+import AhChacha.Backend.dto.request.TokenRequest;
+import AhChacha.Backend.dto.response.SignUpResponse;
+import AhChacha.Backend.dto.response.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -29,22 +33,22 @@ public class AuthController {
 
     //FE에서 AccessToken넘김
     @PostMapping("/token")
-    public ResponseEntity<TokenDto> getAccessToken(@RequestBody OAuth2TokenRequestDto oAuth2TokenRequestDto) {
-        String accessToken = oAuth2TokenRequestDto.getOAuth2AccessToken();
+    public ResponseEntity<TokenResponse> getAccessToken(@RequestBody OAuth2TokenRequest oAuth2TokenRequest) {
+        String accessToken = oAuth2TokenRequest.getOAuth2AccessToken();
         System.out.println("accessToken = " + accessToken);
         //memberService.requestUserInfo(accessToken);
         return ResponseEntity.ok(memberService.requestUserInfo(accessToken));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@RequestBody MemberRequestDto memberRequestDto) {
-        return ResponseEntity.ok(memberService.login(memberRequestDto));
+    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest loginRequest) {
+        return ResponseEntity.ok(memberService.login(loginRequest));
     }
 
 
     @PostMapping("/sign-up/general")
-    public ResponseEntity<SignUpResponseDto> signUpWithEmail(@RequestBody GeneralSignUpDto generalSignUpDto) {
-        return ResponseEntity.ok(memberService.signUpWithEmail(generalSignUpDto));
+    public ResponseEntity<SignUpResponse> signUpWithEmail(@RequestBody SignUpRequest signUpRequest) {
+        return ResponseEntity.ok(memberService.signUpWithEmail(signUpRequest));
     }
 
 
@@ -55,7 +59,7 @@ public class AuthController {
 
 
     @PostMapping("/sign-up/{provider}/{id}")
-    public ResponseEntity<SignUpResponseDto> signUp(@PathVariable("provider") Provider provider, @PathVariable("id") String id, @RequestBody SignUpDto signUpDto) throws Exception {
+    public ResponseEntity<SignUpResponse> signUp(@PathVariable("provider") Provider provider, @PathVariable("id") String id, @RequestBody SignUpDto signUpDto) throws Exception {
         System.out.println("provider = " + provider);
         System.out.println("id = " + id);
         return ResponseEntity.ok(memberService.signUp(signUpDto, provider, id));
@@ -67,7 +71,7 @@ public class AuthController {
         //memberService.signUp(signUpDto, provider, id);
         System.out.println("provider = " + provider);
         System.out.println("id = " + id);
-        TokenDto tokenDto;
+        TokenResponse tokenResponse;
 
         return "회원가입 성공";
     }
@@ -84,7 +88,7 @@ public class AuthController {
 
 
     @PostMapping("/reissue")
-    public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
-        return ResponseEntity.ok(memberService.reissue(tokenRequestDto));
+    public ResponseEntity<TokenResponse> reissue(@RequestBody TokenRequest tokenRequest) {
+        return ResponseEntity.ok(memberService.reissue(tokenRequest));
     }
 }

@@ -15,6 +15,9 @@ public class Habit {
     @Column(name = "habit_id", nullable = false)
     private Long id;
 
+    @Column(nullable = false)
+    private int foodNum;
+
     @Column(name = "alcohol", nullable = false)
     private boolean alcohol;
 

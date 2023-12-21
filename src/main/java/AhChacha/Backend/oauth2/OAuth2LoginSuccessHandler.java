@@ -1,6 +1,6 @@
 package AhChacha.Backend.oauth2;
 
-import AhChacha.Backend.controller.dto.TokenDto;
+import AhChacha.Backend.dto.response.TokenResponse;
 import AhChacha.Backend.domain.Provider;
 import AhChacha.Backend.domain.RefreshToken;
 import AhChacha.Backend.domain.RoleType;
@@ -19,8 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-
 
 
 @Service
@@ -73,12 +71,12 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 //System.out.println("result = " + result);
 
             } else {
-                TokenDto tokenDto = loginSuccess(response, customOAuth2User, authentication);
-                System.out.println("tokenDto = " + tokenDto);
+                TokenResponse tokenResponse = loginSuccess(response, customOAuth2User, authentication);
+                System.out.println("tokenDto = " + tokenResponse);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("utf-8");
 
-                String result = objectMapper.writeValueAsString(tokenDto);
+                String result = objectMapper.writeValueAsString(tokenResponse);
                 response.getWriter().write(result);
             }
         } catch (Exception e) {
@@ -88,15 +86,15 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     //dto를 리턴하고 싶은데... redirect를 여기서 하려면.. response 함수를 써야하는듯..
     @Transactional
-    private TokenDto loginSuccess(HttpServletResponse response, CustomOAuth2User customOAuth2User, Authentication authentication) throws IOException {
+    private TokenResponse loginSuccess(HttpServletResponse response, CustomOAuth2User customOAuth2User, Authentication authentication) throws IOException {
         //refresh 토큰 확인?? or 로그인 시 마다 토큰 새로 발급?
-        TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
+        TokenResponse tokenResponse = tokenProvider.generateTokenDto(authentication);
         RefreshToken refreshToken = RefreshToken.builder()
                 .key(authentication.getName())   //refreshToken = platformId
-                .value(tokenDto.getRefreshToken())
+                .value(tokenResponse.getRefreshToken())
                 .build();
         refreshTokenRepository.save(refreshToken);
-        return tokenDto;
+        return tokenResponse;
     }
 
 
