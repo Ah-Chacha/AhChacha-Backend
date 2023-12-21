@@ -1,4 +1,4 @@
-package AhChacha.Backend.controller.dto;
+package AhChacha.Backend.dto.response;
 
 import AhChacha.Backend.domain.Provider;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TokenDto {
+public class TokenResponse {
 
     private String grantType;
     private String accessToken;
@@ -18,4 +18,5 @@ public class TokenDto {
     private Long accessTokenExpiresIn;
     private String id;
     private Provider provider;
+    private Long member_id;
 }

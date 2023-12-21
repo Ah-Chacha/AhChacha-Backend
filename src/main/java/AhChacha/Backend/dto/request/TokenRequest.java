@@ -1,11 +1,11 @@
-package AhChacha.Backend.controller.dto;
+package AhChacha.Backend.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class TokenRequestDto {
+public class TokenRequest {
 
     private String accessToken;
     private String refreshToken;

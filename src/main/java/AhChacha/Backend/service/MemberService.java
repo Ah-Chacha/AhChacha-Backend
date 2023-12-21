@@ -1,10 +1,12 @@
 package AhChacha.Backend.service;
 
-import AhChacha.Backend.controller.dto.*;
-import AhChacha.Backend.domain.Member;
-import AhChacha.Backend.domain.Provider;
-import AhChacha.Backend.domain.RefreshToken;
-import AhChacha.Backend.domain.RoleType;
+import AhChacha.Backend.dto.SignUpDto;
+import AhChacha.Backend.dto.request.LoginRequest;
+import AhChacha.Backend.dto.request.SignUpRequest;
+import AhChacha.Backend.dto.request.TokenRequest;
+import AhChacha.Backend.dto.response.SignUpResponse;
+import AhChacha.Backend.dto.response.TokenResponse;
+import AhChacha.Backend.domain.*;
 import AhChacha.Backend.jwt.TokenProvider;
 import AhChacha.Backend.repository.MemberRepository;
 import AhChacha.Backend.repository.RefreshTokenRepository;
@@ -25,9 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.sql.Timestamp;
 import java.util.Optional;
 
 @Service
@@ -49,7 +49,7 @@ public class MemberService {
 
 
     @Transactional
-    public TokenDto requestUserInfo(String accessToken) {
+    public TokenResponse requestUserInfo(String accessToken) {
         String GOOGLE_USERINFO_REQUEST_URL="https://www.googleapis.com/oauth2/v1/userinfo";
 
 
@@ -78,39 +78,50 @@ public class MemberService {
             String picture = (String) jsonObject.get("picture");
             System.out.println("id = " + id);
             if(memberRepository.findByProviderId(id).isPresent()) {
-                TokenDto tokenDto = tokenProvider.generateTokenDtoByAuthName(id, Provider.GOOGLE);
-                RefreshToken refreshToken = RefreshToken.builder()
-                        .key(id)
-                        .value(tokenDto.getRefreshToken())
-                        .build();
-                refreshTokenRepository.save(refreshToken);
-                return tokenDto;
+                Optional<Member> member1 = memberRepository.findByProviderId(id);
+                if(member1.isPresent()) {
+                    Member member2 = member1.get();
+                    TokenResponse tokenResponse = tokenProvider.generateTokenDtoByAuthName(id, Provider.GOOGLE, member2.getId());
+                    RefreshToken refreshToken = RefreshToken.builder()
+                            .key(id)
+                            .value(tokenResponse.getRefreshToken())
+                            .build();
+                    refreshTokenRepository.save(refreshToken);
+                    return tokenResponse;
+                } else {
+                    try {
+                        throw new Exception();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
             else {
+                Timestamp createTime = new Timestamp(System.currentTimeMillis());
                 Member member = Member.builder()     //처음
                         .nickname(name)
-                        .provider(Provider.GOOGLE)
+//                        .provider(Provider.GOOGLE)
                         .providerId(id)
                         .profileImage(picture)
-                        .roleType(RoleType.GUEST)
+//                        .roleType(RoleType.GUEST)
                         .build();
                 memberRepository.save(member);
-                TokenDto tokenDto = tokenProvider.generateTokenDtoByAuthName(id, Provider.GOOGLE);
+                TokenResponse tokenResponse = tokenProvider.generateTokenDtoByAuthName(id, Provider.GOOGLE, member.getId());
                 RefreshToken refreshToken = RefreshToken.builder()
                         .key(id)
-                        .value(tokenDto.getRefreshToken())
+                        .value(tokenResponse.getRefreshToken())
                         .build();
                 refreshTokenRepository.save(refreshToken);
-                return tokenDto;
+                return tokenResponse;
             }
-        } catch (JSONException e) {;
+        } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
 
 
     @Transactional
-    public String signUp(SignUpDto signUpDto, Provider provider, String id) throws Exception {
+    public SignUpResponse signUp(SignUpDto signUpDto, Provider provider, String id) throws Exception {
 
         /*
         //JWT 발급
@@ -126,7 +137,36 @@ public class MemberService {
 
         Optional<Member> member = memberRepository.findByProviderAndProviderId(provider, id);
 
-        String provider_to_string = "";
+        if(member.isPresent()) {
+            Member member1 = member.get();
+            String provider_to_string = "";
+
+            if(provider.toString().equals("GOOGLE")) {
+                provider_to_string = "GOOGLE";
+            } else if (provider.toString().equals("KAKAO")) {
+                provider_to_string = "KAKAO";
+            }
+
+            String gender_to_string = "";
+            if(signUpDto.getGender().toString().equals("MAN")) {
+                gender_to_string = "MAN";
+            } else if (signUpDto.getGender().toString().equals("WOMAN")) {
+                gender_to_string = "WOMAN";
+            }
+
+            memberRepository.updateMember(signUpDto.getAge(), signUpDto.getHeight(), gender_to_string, signUpDto.getWeight(), provider_to_string, id);
+
+
+            return SignUpResponse.of(member1);
+        } else {
+            try {
+                throw new Exception();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        /*String provider_to_string = "";
 
         if(provider.toString().equals("GOOGLE")) {
             provider_to_string = "GOOGLE";
@@ -134,8 +174,15 @@ public class MemberService {
             provider_to_string = "KAKAO";
         }
 
-        memberRepository.updateMember(signUpDto.getEmail(), signUpDto.getPhoneNumber(), provider_to_string, id);
-        System.out.println("signUpDto = " + signUpDto.getPhoneNumber());
+        String gender_to_string = "";
+        if(signUpDto.getGender().toString().equals("MAN")) {
+            gender_to_string = "MAN";
+        } else if (signUpDto.getGender().toString().equals("WOMAN")) {
+            gender_to_string = "WOMAN";
+        }
+
+        memberRepository.updateMember(signUpDto.getAge(), signUpDto.getHeight(), gender_to_string, signUpDto.getWeight(), provider_to_string, id);
+        //System.out.println("signUpDto = " + signUpDto.getPhoneNumber());
 
 
         /*Member member = Member.builder()
@@ -148,73 +195,73 @@ public class MemberService {
 
         //memberRepository.findByProviderAndProviderId()
 
-        return "추가정보입력 성공";
+        //return null;
 
     }
 
 
     @Transactional
-    public TokenDto reissue(TokenRequestDto tokenRequestDto) {    //토큰 재발급
+    public TokenResponse reissue(TokenRequest tokenRequest) {    //토큰 재발급
         // 1. Refresh Token 검증
-        if (!tokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
+        if (!tokenProvider.validateToken(tokenRequest.getRefreshToken())) {
             throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
         }
 
         // 2. Access Token 에서 Member ID 가져오기
-        Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
+        Authentication authentication = tokenProvider.getAuthentication(tokenRequest.getAccessToken());
 
         // 3. 저장소에서 Member ID 를 기반으로 Refresh Token 값 가져옴
         RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
 
         // 4. Refresh Token 일치하는지 검사
-        if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())) {
+        if (!refreshToken.getValue().equals(tokenRequest.getRefreshToken())) {
             throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
         }
 
         // 5. 새로운 토큰 생성
-        TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
+        TokenResponse tokenResponse = tokenProvider.generateTokenDto(authentication);
 
         // 6. 저장소 정보 업데이트
-        RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
+        RefreshToken newRefreshToken = refreshToken.updateValue(tokenResponse.getRefreshToken());
         refreshTokenRepository.save(newRefreshToken);
 
         // 토큰 발급
-        return tokenDto;
+        return tokenResponse;
     }
 
     @Transactional
-    public TokenDto login(MemberRequestDto memberRequestDto) {
+    public TokenResponse login(LoginRequest tokenRequest) {
         // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성
-        UsernamePasswordAuthenticationToken authenticationToken = memberRequestDto.toAuthentication();
+        UsernamePasswordAuthenticationToken authenticationToken = tokenRequest.toAuthentication();
 
         // 2. 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
         //    authenticate 메서드가 실행이 될 때 CustomUserDetailsService 에서 만들었던 loadUserByUsername 메서드가 실행됨
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
+        TokenResponse tokenResponse = tokenProvider.generateTokenDto(authentication);
 
         // 4. RefreshToken 저장
         RefreshToken refreshToken = RefreshToken.builder()
                 .key(authentication.getName())
-                .value(tokenDto.getRefreshToken())
+                .value(tokenResponse.getRefreshToken())
                 .build();
 
         refreshTokenRepository.save(refreshToken);
         // 5. 토큰 발급
-        return tokenDto;
+        return tokenResponse;
     }
 
     @Transactional
-    public String signUpWithEmail(GeneralSignUpDto generalSignUpDto) {
-        if(memberRepository.existsByEmail(generalSignUpDto.getEmail())) {
+    public SignUpResponse signUpWithEmail(SignUpRequest signUpRequest) {
+        if(memberRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new RuntimeException("이미 가입된 사용자입니다.");
         }
 
-        Member member = generalSignUpDto.toMember(passwordEncoder);
+        Member member = signUpRequest.toMember(passwordEncoder);
 
-        return "회원가입";
+        return SignUpResponse.of(memberRepository.save(member));
     }
 
     /*public TokenDto socialSignUp(SignUpDto signUpDto) {

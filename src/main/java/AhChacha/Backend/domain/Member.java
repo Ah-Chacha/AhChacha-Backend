@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 public class Member {
 
     public static final String STATUS_ACTIVE = "active";
-    public static final String DEFAULT_PROFILE_ROOT = "/Users/lyouxsun/Desktop/LS/Backend/src/main/resources/picture/profileImage.png";
+    public static final String DEFAULT_PROFILE_ROOT = "./profileImage.png";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,15 +38,16 @@ public class Member {
     @Column(name="email")
     private String email;
 
-    @Column(name="class")
-    @Enumerated(value = EnumType.STRING)
-    private Classification classification;
+//    @Column(name="class")
+//    @Enumerated(value = EnumType.STRING)
+//    private Classification classification;
 
     @Column(name="create_at")
     private Timestamp createDate;
 
     @Column(name= "status")
     private String status = STATUS_ACTIVE;
+
     @Column(name="login_id")
     private String loginId;
 
@@ -56,6 +57,13 @@ public class Member {
     @Column(name="weight")
     private int weight;
 
+    @Column(name = "height")
+    private int height;
+
+//    @Column(name = "gender")
+//    @Enumerated(value = EnumType.STRING)
+//    private Gender gender;
+//
     @Column(name = "platform")
     //@Enumerated(value = EnumType.STRING)
     @Convert(converter = ProviderConverter.class)
@@ -68,18 +76,30 @@ public class Member {
     @Enumerated(value = EnumType.STRING)
     private RoleType roleType;
 
+    @Column(name="birthday")
+    private Timestamp birthday;
+
 
     @Builder
-    public Member(String loginPassword, String phoneNumber, Provider provider, String loginId, String email, String nickname, String profileImage, String providerId, RoleType roleType) {
-        this.provider = provider;
-        this.loginId = loginId;
-        this.email = email;
+    public Member(String name, String nickname, String profileImage, String phoneNumber,
+                  String email, String loginId, String loginPassword,
+                  int weight, int height, String providerId, Timestamp birthday) {
+//        this.provider = provider;
+        this.name = name;
         this.nickname = nickname;
         this.profileImage = profileImage;
-        this.providerId = providerId;
-        this.roleType = roleType;
         this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.loginId = loginId;
         this.loginPassword = loginPassword;
+//        this.providerId = providerId;
+//        this.roleType = roleType;
+//        this.gender = gender;
+        this.weight = weight;
+        this.height = height;
+        this.providerId = providerId;
+        this.birthday = birthday;
+        this.createDate = createDate;
     }
 
 

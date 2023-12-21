@@ -3,7 +3,7 @@ package AhChacha.Backend.service;
 import AhChacha.Backend.domain.Member;
 import AhChacha.Backend.domain.Provider;
 import AhChacha.Backend.oauth2.CustomOAuth2User;
-import AhChacha.Backend.controller.dto.OAuth2AttributesDto;
+import AhChacha.Backend.dto.request.OAuth2Attributes;
 import AhChacha.Backend.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +46,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
-        OAuth2AttributesDto extractAttributes = OAuth2AttributesDto.of(provider, userNameAttributeName, attributes);
+        OAuth2Attributes extractAttributes = OAuth2Attributes.of(provider, userNameAttributeName, attributes);
 
         Member createdMember = getMember(extractAttributes, provider);
 
@@ -58,7 +58,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 createdMember.getRoleType()
         );
     }
-    private Member getMember(OAuth2AttributesDto extractAttributes, Provider provider) {
+    private Member getMember(OAuth2Attributes extractAttributes, Provider provider) {
         Member findMember = memberRepository.findByProviderAndProviderId(provider,
                 extractAttributes.getOAuth2UserInfo().getId()).orElse(null);
         if(findMember == null) {
@@ -68,7 +68,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     @Transactional
-    private Member saveMember(OAuth2AttributesDto extractAttributes, Provider provider) {
+    public Member saveMember(OAuth2Attributes extractAttributes, Provider provider) {
         Member createdMember = extractAttributes.toMember(provider, extractAttributes.getOAuth2UserInfo());
         return memberRepository.save(createdMember);
     }
@@ -80,5 +80,3 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         return Provider.GOOGLE;
     }
 }
-
-

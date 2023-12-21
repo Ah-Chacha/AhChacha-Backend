@@ -1,6 +1,7 @@
 package AhChacha.Backend.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,11 +21,12 @@ public class Blood {
     private Timestamp measureTime;
 
     @Column(name="systolic_pressure", nullable = false)
-    private int systolicPressure;
+    private int systolicPressure;   //수축기 혈압
 
     @Column(name = "diastolic_pressure", nullable = false)
-    private int diastolicPressure;
+    private int diastolicPressure;  //이완기 혈압
 
+    //심박수
     @Column(name = "heart_rate", nullable = false)
     private int heartRate;
 
@@ -40,4 +42,17 @@ public class Blood {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Member member;
+
+    @Builder
+    public Blood(Member member, Timestamp measureTime, int systolicPressure, int diastolicPressure,
+                 int heartRate, int bloodSugar, int cholesterol, Timestamp bloodDay) {
+        this.member = member;
+        this.measureTime = measureTime;
+        this.systolicPressure = systolicPressure;
+        this.diastolicPressure = diastolicPressure;
+        this.heartRate = heartRate;
+        this.bloodSugar = bloodSugar;
+        this.cholesterol = cholesterol;
+        this.bloodDay = bloodDay;
+    }
 }
