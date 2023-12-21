@@ -99,6 +99,7 @@ public class Member {
         this.height = height;
         this.providerId = providerId;
         this.birthday = birthday;
+        this.createDate = createDate;
     }
 
 

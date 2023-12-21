@@ -8,6 +8,7 @@ import AhChacha.Backend.oauth2.userinfo.OAuth2UserInfo;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.sql.Timestamp;
 import java.util.Map;
 
 @Getter
@@ -41,6 +42,7 @@ public class OAuth2Attributes {
 
     public Member toMember(Provider provider, OAuth2UserInfo oAuth2UserInfo) {
         System.out.println("platform = " + provider);
+        Timestamp createTime = new Timestamp(System.currentTimeMillis());
         return Member.builder()
 //                .provider(provider)
                 .providerId(oAuth2UserInfo.getId())

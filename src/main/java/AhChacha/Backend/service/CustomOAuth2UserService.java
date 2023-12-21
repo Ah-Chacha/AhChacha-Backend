@@ -68,7 +68,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     @Transactional
-    Member saveMember(OAuth2Attributes extractAttributes, Provider provider) {
+    public Member saveMember(OAuth2Attributes extractAttributes, Provider provider) {
         Member createdMember = extractAttributes.toMember(provider, extractAttributes.getOAuth2UserInfo());
         return memberRepository.save(createdMember);
     }

@@ -25,6 +25,7 @@ public class SignUpRequest {
 
 
     public Member toMember(PasswordEncoder passwordEncoder) {
+        Timestamp createTime = new Timestamp(System.currentTimeMillis());
         return Member.builder()
                 .email(email)
                 .loginPassword(password)

@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.sql.Timestamp;
 import java.util.Optional;
 
 @Service
@@ -96,6 +97,7 @@ public class MemberService {
                 }
             }
             else {
+                Timestamp createTime = new Timestamp(System.currentTimeMillis());
                 Member member = Member.builder()     //처음
                         .nickname(name)
 //                        .provider(Provider.GOOGLE)
@@ -112,7 +114,7 @@ public class MemberService {
                 refreshTokenRepository.save(refreshToken);
                 return tokenResponse;
             }
-        } catch (JSONException e) {;
+        } catch (JSONException e) {
             throw new RuntimeException(e);
         }
     }
