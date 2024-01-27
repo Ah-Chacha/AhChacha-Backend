@@ -1,16 +1,15 @@
 package AhChacha.Backend.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.Arrays;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum RoleType {
-    USER("ROLE_USER"),
-    ADMIN("ROLE_ADMIN"),
-    GUEST("GUEST");
+    USER("ROLE_USER", "일반 사용자"),
+    ADMIN("ROLE_ADMIN", "관리자"),
+    GUEST("ROLE_GUEST", "손님");
 
     private final String key;
+    private final String title;
 }
