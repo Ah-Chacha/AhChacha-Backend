@@ -45,8 +45,7 @@ public class OAuth2Attributes {
         Timestamp createTime = new Timestamp(System.currentTimeMillis());
         return Member.builder()
 //                .provider(provider)
-                .providerId(oAuth2UserInfo.getId())
-                .nickname(oAuth2UserInfo.getNickname())
+//                .providerId(oAuth2UserInfo.getId())
                 .profileImage(oAuth2UserInfo.getProfileImageUrl())
 //                .provider(provider)
 //                .roleType(RoleType.GUEST)

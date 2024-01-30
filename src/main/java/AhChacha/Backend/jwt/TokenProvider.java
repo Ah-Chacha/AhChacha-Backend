@@ -1,8 +1,8 @@
 package AhChacha.Backend.jwt;
 
 
-import AhChacha.Backend.dto.response.TokenResponse;
 import AhChacha.Backend.domain.Provider;
+import AhChacha.Backend.dto.response.TokenResponse;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -31,8 +31,8 @@ public class TokenProvider {
     private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
     private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
     private static final String EMAIL_CLAIM = "email";
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000*60*30;  //30분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000*60*60*24*7;  //7일
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;  //30분
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  //7일
 
     private final Key key;
 
@@ -43,14 +43,14 @@ public class TokenProvider {
     }
 
 
-    public TokenResponse generateTokenDtoByAuthName(String name, Provider provider, Long memberId) {
+    public TokenResponse generateTokenResponseByAuthName(String name, Provider provider, Long memberId) {
         long now = (new Date()).getTime();
 
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
-                .setSubject(name)       // payload "sub": "name"
-                .claim(AUTHORITIES_KEY, "USER")        // payload "auth": "ROLE_USER"
+                .setSubject(name)       // payload "sub": "name" (사용자의 ID)
+                .claim(AUTHORITIES_KEY, "USER")        // payload "auth": "ROLE_USER" (사용자의 권한정보)
                 .setExpiration(accessTokenExpiresIn)        // payload "exp": 1516239022 (예시)
                 .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512"
                 .compact();
@@ -75,7 +75,6 @@ public class TokenProvider {
     }
 
 
-
     public TokenResponse generateTokenDto(Authentication authentication) {
 
         String authorities = authentication.getAuthorities().stream()
@@ -83,7 +82,7 @@ public class TokenProvider {
                 .collect(Collectors.joining(","));
 
         System.out.println("authorities = " + authorities);
-        System.out.println("!@!#$!$$@#@##@@authentication = !!!!" + authentication.getName());
+        System.out.println("authentication = " + authentication.getName());
 
         long now = (new Date()).getTime();
 
@@ -175,6 +174,7 @@ public class TokenProvider {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.error(e.getMessage());
             log.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토큰입니다.");
@@ -186,8 +186,7 @@ public class TokenProvider {
         return false;
     }
 
-
-
+    //accessToken을 복호화
     private Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();

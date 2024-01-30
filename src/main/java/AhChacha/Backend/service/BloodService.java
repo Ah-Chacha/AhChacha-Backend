@@ -26,13 +26,9 @@ public class BloodService {
     public String createBlood(BloodRequest bloodRequest, Long id){
         Optional<Member> member = memberRepository.findById(id);
         if(member.isPresent()){
-            Member member1 = member.get();
-            /**
-             * bloodid 생성해서 저장해야한다.
-             */
-
+            Member existingMember = member.get();
             Blood blood = Blood.builder()
-                    .member(member1)
+                    .member(existingMember)
                     .measureTime(bloodRequest.getMeasureTime())
                     .systolicPressure(bloodRequest.getSystolicPressure())
                     .diastolicPressure(bloodRequest.getDiastolicPressure())
