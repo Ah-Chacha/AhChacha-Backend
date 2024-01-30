@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'AhChacha'
-version = '0.0.1-SNAPSHOT'
+version '0.0.1-SNAPSHOT-'+new Date().format("yyyyMMddHHmmss")
 
 java {
 	sourceCompatibility = '17'
@@ -24,7 +24,8 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
+	implementation ('org.projectlombok:lombok:1.18.24')
+	annotationProcessor ('org.projectlombok:lombok:1.18.24')
 
 	//JSON
 	implementation group: 'org.json', name: 'json', version: '20090211'
@@ -35,6 +36,7 @@ dependencies {
 	runtimeOnly 'mysql:mysql-connector-java:8.0.33'
 	runtimeOnly 'com.h2database:h2'
 
+
 	//oauth2
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
@@ -42,7 +44,9 @@ dependencies {
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
-
+//	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+//	implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
+//	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

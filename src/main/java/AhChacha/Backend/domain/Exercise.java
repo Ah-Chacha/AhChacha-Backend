@@ -3,30 +3,28 @@ package AhChacha.Backend.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
-import java.sql.Timestamp;
-
-@Entity @Getter
+@Entity
+@Getter
 @NoArgsConstructor
 @Table(name = "exercise")
-public class Exercise {
+public class Exercise extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "exercise_id", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "exercise_time", nullable = false)
+    @Comment("하루 운동 시간")
+    @Column(name = "time", nullable = false)
     private int time;
 
-    @Column(name = "exercise_type", nullable = false)
+    @Column(name = "type", nullable = false)
     private String type;
 
-    @Column(name = "exercise_day", nullable = false)
-    private Timestamp date;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private Member memberId;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
 }

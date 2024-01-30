@@ -10,15 +10,15 @@ import lombok.extern.slf4j.Slf4j;
 public class ProviderConverter implements AttributeConverter<Provider, String> {
     @Override
     public String convertToDatabaseColumn(Provider provider) {
-        if(provider == null) return null;
+        if (provider == null) return null;
         return provider.toString();
     }
 
     @Override
     public Provider convertToEntityAttribute(String dbData) {
-        if(dbData == null) return null;
+        if (dbData == null) return null;
         try {
-            return Provider.ofLegacyCode(dbData);
+            return Provider.GOOGLE;
         } catch (IllegalArgumentException e) {
             log.error("can't convert");
             throw e;

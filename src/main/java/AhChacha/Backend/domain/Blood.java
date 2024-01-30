@@ -4,48 +4,50 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 import java.sql.Timestamp;
 
-@Entity @Getter
+@Entity
+@Getter
 @NoArgsConstructor
 @Table(name = "Blood")
-public class Blood {
+public class Blood extends BaseTimeEntity {
 
     @Id
-    @Column(name = "blood_id", nullable = false)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "mesuer_time", nullable = false)
+    @Column(name = "mesure_time", nullable = false)
     private Timestamp measureTime;
 
-    @Column(name="systolic_pressure", nullable = false)
-    private int systolicPressure;   //수축기 혈압
+    @Comment("수축기 혈압")
+    @Column(name = "systolic_pressure", nullable = false)
+    private int systolicPressure;
 
+    @Comment("이완기 혈압")
     @Column(name = "diastolic_pressure", nullable = false)
-    private int diastolicPressure;  //이완기 혈압
+    private int diastolicPressure;
 
-    //심박수
+    @Comment("심박수")
     @Column(name = "heart_rate", nullable = false)
     private int heartRate;
 
+    @Comment("혈당")
     @Column(name = "blood_sugar", nullable = false)
     private int bloodSugar;
 
     @Column(name = "cholesterol", nullable = false)
     private int cholesterol;
 
-    @Column(name = "blood_day", nullable = false)
-    private Timestamp bloodDay;
-
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @Builder
     public Blood(Member member, Timestamp measureTime, int systolicPressure, int diastolicPressure,
-                 int heartRate, int bloodSugar, int cholesterol, Timestamp bloodDay) {
+                 int heartRate, int bloodSugar, int cholesterol) {
         this.member = member;
         this.measureTime = measureTime;
         this.systolicPressure = systolicPressure;
@@ -53,6 +55,5 @@ public class Blood {
         this.heartRate = heartRate;
         this.bloodSugar = bloodSugar;
         this.cholesterol = cholesterol;
-        this.bloodDay = bloodDay;
     }
 }

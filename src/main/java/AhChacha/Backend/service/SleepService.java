@@ -29,12 +29,12 @@ public class SleepService {
     public SleepResponse createSleep(SleepRequest sleepRequest, Long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
         if(member.isPresent()) {
-            Member member1 = member.get();
+            Member existingMember = member.get();
             Sleep sleep = Sleep.builder()
                     .startTime(sleepRequest.getStartTime())
                     .endTime(sleepRequest.getEndTime())
                     .quality(sleepRequest.getQuality())
-                    .memberId(member1)
+                    .member(existingMember)
                     .build();
             return new SleepResponse(sleepRepository.save(sleep).getId());
         }
