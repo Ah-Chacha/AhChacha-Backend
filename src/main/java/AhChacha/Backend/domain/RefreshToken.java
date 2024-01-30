@@ -1,6 +1,9 @@
 package AhChacha.Backend.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,13 +16,10 @@ import lombok.NoArgsConstructor;
 public class RefreshToken {
 
     @Id
-    @Column(name = "rt_key")
+    @Column(name = "refresh_token_key")
     private String key; //email
 
-    /*@OneToOne(mappedBy = "refreshToken", fetch = FetchType.LAZY)
-    private Member member;*/
-
-    @Column(name = "rt_value")
+    @Column(name = "refresh_token_value")
     private String value;  //refresh token
 
     @Builder

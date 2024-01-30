@@ -2,13 +2,12 @@ package AhChacha.Backend.controller;
 
 
 import AhChacha.Backend.domain.Provider;
+import AhChacha.Backend.dto.request.SignUpRequest;
 import AhChacha.Backend.repository.MemberRepository;
 import AhChacha.Backend.service.CustomOAuth2UserService;
 import AhChacha.Backend.service.MemberService;
-import AhChacha.Backend.dto.SignUpDto;
 import AhChacha.Backend.dto.request.LoginRequest;
 import AhChacha.Backend.dto.request.OAuth2TokenRequest;
-import AhChacha.Backend.dto.request.SignUpRequest;
 import AhChacha.Backend.dto.request.TokenRequest;
 import AhChacha.Backend.dto.response.SignUpResponse;
 import AhChacha.Backend.dto.response.TokenResponse;
@@ -35,9 +34,9 @@ public class AuthController {
     @PostMapping("/token")
     public ResponseEntity<TokenResponse> getAccessToken(@RequestBody OAuth2TokenRequest oAuth2TokenRequest) {
         String accessToken = oAuth2TokenRequest.getOAuth2AccessToken();
-        System.out.println("accessToken = " + accessToken);
-        //memberService.requestUserInfo(accessToken);
-        return ResponseEntity.ok(memberService.requestUserInfo(accessToken));
+        log.info("accessToken = " + accessToken);
+//        memberService.requestUserInfo(accessToken);
+        return ResponseEntity.ok(memberService.requestUserInfo(accessToken));       // 질문 : 이렇게 호출하면 requestUserInfo를 두번 호출하지 않아?
     }
 
     @PostMapping("/login")
@@ -47,7 +46,7 @@ public class AuthController {
 
 
     @PostMapping("/sign-up/general")
-    public ResponseEntity<SignUpResponse> signUpWithEmail(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<SignUpResponse> signUpWithEmail(@RequestBody AhChacha.Backend.dto.request.SignUpRequest signUpRequest) {
         return ResponseEntity.ok(memberService.signUpWithEmail(signUpRequest));
     }
 
@@ -59,10 +58,10 @@ public class AuthController {
 
 
     @PostMapping("/sign-up/{provider}/{id}")
-    public ResponseEntity<SignUpResponse> signUp(@PathVariable("provider") Provider provider, @PathVariable("id") String id, @RequestBody SignUpDto signUpDto) throws Exception {
+    public ResponseEntity<SignUpResponse> signUp(@PathVariable("provider") Provider provider, @PathVariable("id") String id, @RequestBody SignUpRequest signUpRequest) throws Exception {
         System.out.println("provider = " + provider);
         System.out.println("id = " + id);
-        return ResponseEntity.ok(memberService.signUp(signUpDto, provider, id));
+        return ResponseEntity.ok(memberService.signUp(signUpRequest, provider, id));
     }
 
 
