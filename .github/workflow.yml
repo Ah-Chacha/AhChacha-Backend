@@ -5,7 +5,14 @@ on:
   release:
     types: [push]  # (1) push시 자동으로 실행됩니다.
   push:
-    branches: 'feat/ci-cd' # (2) main 브랜치에서 동작합니다.
+    branches:
+      - feat/ci-cd
+      - main
+      - dev  # (2) main 브랜치에서 동작합니다.
+  pull_request:
+    branches:
+      - main
+      - dev
   workflow_dispatch: # (3) 수동으로도 실행이 가능힙니다.
 
 jobs:
@@ -26,6 +33,17 @@ jobs:
           distribution: 'temurin'
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
           settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+      ## gradle caching
+      - name: Gradle Caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew # (7)
