@@ -9,11 +9,11 @@ on:
     branches:
       - 'develop'
       - 'main'
-      - 'dev'  # (2) main 브랜치에서 동작합니다.
+      - 'feat/ci-cd'  # (2) main 브랜치에서 동작합니다.
   pull_request:
     branches:
       - 'main'
-      - 'dev'
+      - 'develop'
   workflow_dispatch: # (3) 수동으로도 실행이 가능힙니다.
 
 jobs:
