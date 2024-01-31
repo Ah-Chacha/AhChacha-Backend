@@ -57,7 +57,7 @@ jobs:
         shell: bash
 
       - name: Create application.yml
-        if: contains(github.ref, 'feat/ci-cd')
+        if: contains(github.ref, 'main') || contains(github.ref, 'feat/ci-cd')
         run: |
           mkdir -p ./src/main/resources
           cd ./src/main/resources
