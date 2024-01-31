@@ -1,16 +1,17 @@
 name: AhChacha-Backend
 
 on:
-  #  release:
-  #    types: [push]  # (1) push시 자동으로 실행됩니다.
+  release:
+    types: [push]  # (1) push시 자동으로 실행됩니다.
   push:
-    branches: 'develop'
-  #      - main
-  #      - dev  # (2) main 브랜치에서 동작합니다.
-  #  pull_request:
-  #    branches: 'main'
-  #      - main
-  #      - dev
+    branches:
+      - 'develop'
+      - 'main'
+      - 'dev'  # (2) main 브랜치에서 동작합니다.
+  pull_request:
+    branches:
+      - 'main'
+      - 'dev'
   workflow_dispatch: # (3) 수동으로도 실행이 가능힙니다.
 
 jobs:
