@@ -62,6 +62,7 @@ jobs:
           mkdir -p ./src/main/resources
           cd ./src/main/resources
           touch ./application.yml
+          touch ./application-real.yml
           echo "${{ secrets.PROPERTIES_YAML }}" > ./application.yml
           echo "${{ secrets.PROPERTIES_REAL_YAML }}" > ./application-real.yml
         shell: bash
