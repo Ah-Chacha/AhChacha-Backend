@@ -8,7 +8,7 @@ function find_idle_profile()
 
     if [${RESPONSE_CODE} -ge 400 ]      # 400보다 크면 (http status code가 400, 500대인 경우)
     then
-        CURRENT_PROFILE=real2
+        CURRENT_PROFILE=real
     else
         CURRENT_PROFILE=$(curl -s http://localhost/profile)
     fi
