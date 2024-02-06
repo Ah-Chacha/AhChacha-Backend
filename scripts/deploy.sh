@@ -30,5 +30,8 @@ nohup java -jar \
         -Dspring.config.location=file:///home/ec2-user/app/step2/zip/application.yml \
         $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
 
+#         -Dspring.config.location=classpath:/application.yml \
+
+
 #         -Dspring.config.location=classpath:$REPOSITORY/zip/application.yml,/home/ec2-user/app/real-application.yml \
 #         -Dspring.profiles.active=real \
