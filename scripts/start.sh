@@ -5,9 +5,6 @@ ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
 source ${ABSDIR}/profile.sh
 
-here = $(pwd)
-echo "----------현재 위치---------- $here"
-
 REPOSITORY=/home/ec2-user/app/nonstop
 PROJECT_NAME=AhChacha-Backend
 
@@ -29,6 +26,6 @@ IDLE_PROFILE=$(find_idle_profile)
 
 echo ">> $JAR_NAME 를 profile=$IDLE_PROJECT 로 실행합니다."
 nohup java -jar \
-        -Dspring.config.location=classpath:$REPOSITORY/zip/application.yml \
+        -Dspring.config.location=classpath:~/app/nonstop/zip/application.yml \
         -Dspring.profiles.active=$IDLE_PROFILE \
         $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
