@@ -1,7 +1,7 @@
 # !/usr/bin/env bash
 # step2 의 deploy.sh 와 유사
 # deploy.sh 와의 차이점 : IDLE_PROFILE을 통해 properties 파일을 가져오고 active profile을 지정한다.
-ASBPATH=$(readlink -f $0)
+ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
 source ${ABSDIR}/profile.sh
 
