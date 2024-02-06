@@ -56,17 +56,6 @@ jobs:
         run: ./gradlew clean -x test build # (8)
         shell: bash
 
-#      - name: Create application.yml
-#        if: contains(github.ref, 'main') || contains(github.ref, 'feat/ci-cd')
-#        run: |
-#          mkdir -p ./src/main/resources
-#          cd ./src/main/resources
-#          touch ./application.yml
-#          touch ./application-real.yml
-#          echo "${{ secrets.PROPERTIES_YAML }}" > ./application.yml
-#          echo "${{ secrets.PROPERTIES_REAL_YAML }}" > ./application-real.yml
-#        shell: bash
-
       - name: Get current time
         uses: 1466587594/get-current-time@v2  # (9)
         id: current-time
@@ -84,7 +73,6 @@ jobs:
           mkdir -p before-deploy
           cp scripts/deploy.sh before-deploy/
           cp appspec.yml before-deploy/
-#          cp application.yml before-deploy/
           cp build/libs/*.jar before-deploy/
           cd before-deploy && zip -r before-deploy *
           cd ../ && mkdir -p deploy
