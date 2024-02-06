@@ -8,7 +8,7 @@ source ${ABSDIR}/profile.sh
 here = $(pwd)
 echo "----------현재 위치---------- $here"
 
-REPOSITORY=/home/ec2-user/app/step2
+REPOSITORY=/home/ec2-user/app/nonstop
 PROJECT_NAME=AhChacha-Backend
 
 echo ">> Build 파일 복사"

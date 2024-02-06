@@ -3,7 +3,7 @@ version: 0.0     # (1)
 os: linux
 files:
   - source: /     # (2)
-    destination: /home/ec2-user/app/step2/zip/     # (3)
+    destination: /home/ec2-user/app/nonstop/zip     # (3)
     overwrite: yes
 
 # codeDeploy에서 EC2서버로 넘겨준 파일들을 모두 ec2-user 권한을 갖도록 함
