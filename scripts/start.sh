@@ -5,9 +5,6 @@ ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
 source ${ABSDIR}/profile.sh
 
-here = $(pwd)
-echo "----------현재 위치---------- $here"
-
 REPOSITORY=/home/ec2-user/app/nonstop
 PROJECT_NAME=AhChacha-Backend
 
