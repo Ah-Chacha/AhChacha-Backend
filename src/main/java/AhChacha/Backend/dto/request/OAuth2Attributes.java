@@ -1,8 +1,7 @@
 package AhChacha.Backend.dto.request;
 
 import AhChacha.Backend.domain.Member;
-import AhChacha.Backend.domain.Provider;
-import AhChacha.Backend.domain.RoleType;
+import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.oauth2.userinfo.GoogleOAuth2UserInfo;
 import AhChacha.Backend.oauth2.userinfo.OAuth2UserInfo;
 import lombok.Builder;
@@ -23,11 +22,11 @@ public class OAuth2Attributes {
         this.oAuth2UserInfo = oAuth2UserInfo;
     }
 
-    public static OAuth2Attributes of(Provider provider, String userNameAttributeKey, Map<String, Object> attributes) {
+    public static OAuth2Attributes of(Platform platform, String userNameAttributeKey, Map<String, Object> attributes) {
         /*if (platform == Platform.GOOGLE) {
             return ofGoogle(userNameAttributeKey, attributes);
         }*/
-        System.out.println("platform = " + provider);
+        System.out.println("platform = " + platform);
         return ofGoogle(userNameAttributeKey, attributes);
     }
 
@@ -40,8 +39,8 @@ public class OAuth2Attributes {
                 .build();
     }
 
-    public Member toMember(Provider provider, OAuth2UserInfo oAuth2UserInfo) {
-        System.out.println("platform = " + provider);
+    public Member toMember(Platform platform, OAuth2UserInfo oAuth2UserInfo) {
+        System.out.println("platform = " + platform);
         Timestamp createTime = new Timestamp(System.currentTimeMillis());
         return Member.builder()
 //                .provider(provider)

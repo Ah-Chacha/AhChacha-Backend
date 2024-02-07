@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -20,23 +20,23 @@ public class Sleep extends BaseTimeEntity {
 
     @Comment("수면 시작 시간")
     @Column(name = "start_time", nullable = false)
-    private Timestamp startTime;
+    private LocalDateTime startTime;
 
     @Comment("수면 종료 시간")
     @Column(name = "end_time", nullable = false)
-    private Timestamp endTime;
+    private LocalDateTime endTime;
 
     @Comment("수면의 질 : 1~5 중 택 1")
     @Column(name = "quality_level", nullable = false)
     private int quality;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     private Member member;
 
 
     @Builder
-    public Sleep(Member member, Timestamp startTime, Timestamp endTime, int quality) {
+    public Sleep(Member member, LocalDateTime startTime, LocalDateTime endTime, int quality) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.quality = quality;

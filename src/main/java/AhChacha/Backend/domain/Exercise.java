@@ -1,6 +1,7 @@
 package AhChacha.Backend.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -17,8 +18,8 @@ public class Exercise extends BaseTimeEntity {
     private Long id;
 
     @Comment("하루 운동 시간")
-    @Column(name = "time", nullable = false)
-    private int time;
+    @Column(name = "quantity", nullable = false)
+    private int quantity;
 
     @Column(name = "type", nullable = false)
     private String type;
@@ -26,5 +27,12 @@ public class Exercise extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Builder
+    public Exercise(int quantity, String type, Member member) {
+        this.quantity = quantity;
+        this.type = type;
+        this.member = member;
+    }
 
 }

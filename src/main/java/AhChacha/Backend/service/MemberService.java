@@ -1,7 +1,7 @@
 package AhChacha.Backend.service;
 
 import AhChacha.Backend.domain.Member;
-import AhChacha.Backend.domain.Provider;
+import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.domain.RefreshToken;
 import AhChacha.Backend.dto.request.LoginRequest;
 import AhChacha.Backend.dto.request.SignUpRequest;
@@ -79,7 +79,7 @@ public class MemberService {
                 Optional<Member> optionalMember = memberRepository.findByProviderId(id);
 //                if(member1.isPresent()) {
                 Member existingMember = optionalMember.get();
-                TokenResponse tokenResponse = tokenProvider.generateTokenResponseByAuthName(id, Provider.GOOGLE, existingMember.getId());
+                TokenResponse tokenResponse = tokenProvider.generateTokenResponseByAuthName(id, Platform.GOOGLE, existingMember.getId());
                 return saveRefreshToken(tokenResponse, id);
 //                } else {
 //                    try {
@@ -94,7 +94,7 @@ public class MemberService {
                         .profileImage(picture)
                         .build();
                 memberRepository.save(member);
-                TokenResponse tokenResponse = tokenProvider.generateTokenResponseByAuthName(id, Provider.GOOGLE, member.getId());
+                TokenResponse tokenResponse = tokenProvider.generateTokenResponseByAuthName(id, Platform.GOOGLE, member.getId());
                 return saveRefreshToken(tokenResponse, id);
             }
         } catch (JSONException e) {
@@ -113,7 +113,7 @@ public class MemberService {
 
 
     @Transactional
-    public SignUpResponse signUp(SignUpRequest signUpRequest, Provider provider, String id) throws Exception {
+    public SignUpResponse signUp(SignUpRequest signUpRequest, Platform platform, String id) throws Exception {
 
         /*
         //JWT 발급
@@ -127,15 +127,15 @@ public class MemberService {
 
         //이메일 중첩 확인 등등 해야댐
 
-        Optional<Member> member = memberRepository.findByProviderAndProviderId(provider, id);
+        Optional<Member> member = memberRepository.findByProviderAndProviderId(platform, id);
 
         if (member.isPresent()) {
             Member existingMember = member.get();
             String provider_to_string = "";
 
-            if (provider.toString().equals("GOOGLE")) {
+            if (platform.toString().equals("GOOGLE")) {
                 provider_to_string = "GOOGLE";
-            } else if (provider.toString().equals("KAKAO")) {
+            } else if (platform.toString().equals("KAKAO")) {
                 provider_to_string = "KAKAO";
             }
 
