@@ -1,4 +1,4 @@
-package AhChacha.Backend.dto;
+package AhChacha.Backend.dto.response;
 
 import AhChacha.Backend.domain.Platform;
 import lombok.AllArgsConstructor;

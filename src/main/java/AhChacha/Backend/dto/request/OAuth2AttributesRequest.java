@@ -11,18 +11,18 @@ import java.sql.Timestamp;
 import java.util.Map;
 
 @Getter
-public class OAuth2Attributes {
+public class OAuth2AttributesRequest {
 
     private String nameAttributeKey;
     private OAuth2UserInfo oAuth2UserInfo;
 
     @Builder
-    public OAuth2Attributes(String nameAttributeKey, OAuth2UserInfo oAuth2UserInfo) {
+    public OAuth2AttributesRequest(String nameAttributeKey, OAuth2UserInfo oAuth2UserInfo) {
         this.nameAttributeKey = nameAttributeKey;
         this.oAuth2UserInfo = oAuth2UserInfo;
     }
 
-    public static OAuth2Attributes of(Platform platform, String userNameAttributeKey, Map<String, Object> attributes) {
+    public static OAuth2AttributesRequest of(Platform platform, String userNameAttributeKey, Map<String, Object> attributes) {
         /*if (platform == Platform.GOOGLE) {
             return ofGoogle(userNameAttributeKey, attributes);
         }*/
@@ -31,24 +31,20 @@ public class OAuth2Attributes {
     }
 
 
-    public static OAuth2Attributes ofGoogle(String userNameAttributeKey, Map<String, Object> attributes) {
+    public static OAuth2AttributesRequest ofGoogle(String userNameAttributeKey, Map<String, Object> attributes) {
         System.out.println("userNameAttributeKey = " + userNameAttributeKey);
-        return OAuth2Attributes.builder()
+        return OAuth2AttributesRequest.builder()
                 .nameAttributeKey(userNameAttributeKey)
                 .oAuth2UserInfo(new GoogleOAuth2UserInfo(attributes))
                 .build();
     }
 
-    public Member toMember(Platform platform, OAuth2UserInfo oAuth2UserInfo) {
+    public Member toMember(Platform platform) {
         System.out.println("platform = " + platform);
-        Timestamp createTime = new Timestamp(System.currentTimeMillis());
-        return Member.builder()
-//                .provider(provider)
-//                .providerId(oAuth2UserInfo.getId())
-                .profileImage(oAuth2UserInfo.getProfileImageUrl())
-//                .provider(provider)
-//                .roleType(RoleType.GUEST)
-                .build();
+        return new Member(platform,
+                oAuth2UserInfo.getId(),
+                oAuth2UserInfo.getProfileImageUrl());
+
     }
 
 }

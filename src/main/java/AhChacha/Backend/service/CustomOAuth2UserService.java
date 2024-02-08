@@ -3,7 +3,7 @@ package AhChacha.Backend.service;
 import AhChacha.Backend.domain.Member;
 import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.oauth2.CustomOAuth2User;
-import AhChacha.Backend.dto.request.OAuth2Attributes;
+import AhChacha.Backend.dto.request.OAuth2AttributesRequest;
 import AhChacha.Backend.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +46,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
-        OAuth2Attributes extractAttributes = OAuth2Attributes.of(platform, userNameAttributeName, attributes);
+        OAuth2AttributesRequest extractAttributes = OAuth2AttributesRequest.of(platform, userNameAttributeName, attributes);
 
         Member createdMember = getMember(extractAttributes, platform);
 
@@ -58,8 +58,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 createdMember.getRoleType()
         );
     }
-    private Member getMember(OAuth2Attributes extractAttributes, Platform platform) {
-        Member findMember = memberRepository.findByProviderAndProviderId(platform,
+    private Member getMember(OAuth2AttributesRequest extractAttributes, Platform platform) {
+        Member findMember = memberRepository.findByPlatformAndPlatformId(platform,
                 extractAttributes.getOAuth2UserInfo().getId()).orElse(null);
         if(findMember == null) {
             return saveMember(extractAttributes, platform);
@@ -68,8 +68,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     @Transactional
-    public Member saveMember(OAuth2Attributes extractAttributes, Platform platform) {
-        Member createdMember = extractAttributes.toMember(platform, extractAttributes.getOAuth2UserInfo());
+    public Member saveMember(OAuth2AttributesRequest extractAttributes, Platform platform) {
+        Member createdMember = extractAttributes.toMember(platform);
         return memberRepository.save(createdMember);
     }
 

@@ -1,4 +1,4 @@
-package AhChacha.Backend.dto.response.status;
+package AhChacha.Backend.exception.status;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,7 +38,7 @@ public enum BaseExceptionResponseStatus implements ResponseStatus{
     /*
      * code 5000번대 : User 오류 (회원가입, 로그인 시 잘못된 요청)
      */
-    DUPLILCATE_EMAIL(5000, HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다."),
+    DUPLICATE_EMAIL(5000, HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다."),
     DUPLICATE_NICKNAME(5001, HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다."),
     PASSWORD_MISMATCH(5002, HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
     EMAIL_NOT_FOUND(5003, HttpStatus.BAD_REQUEST, "존재하지 않는 이메일입니다."),

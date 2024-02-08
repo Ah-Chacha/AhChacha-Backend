@@ -29,7 +29,6 @@ public class BloodService {
             Member existingMember = member.get();
             Blood blood = Blood.builder()
                     .member(existingMember)
-                    .measureTime(bloodRequest.getMeasureTime())
                     .systolicPressure(bloodRequest.getSystolicPressure())
                     .diastolicPressure(bloodRequest.getDiastolicPressure())
                     .heartRate(bloodRequest.getHeartRate())

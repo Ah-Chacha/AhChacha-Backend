@@ -1,6 +1,6 @@
 package AhChacha.Backend.dto.response;
 
-import AhChacha.Backend.dto.response.status.ResponseStatus;
+import AhChacha.Backend.exception.status.ResponseStatus;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 

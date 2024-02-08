@@ -15,10 +15,10 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
 
+    Optional<Member> findByPlatformAndPlatformId(Platform platform, String providerId);
 
-    Optional<Member> findByProviderAndProviderId(Platform platform, String providerId);
+    Optional<Member> findByPlatformId(String providerId);
 
-    Optional<Member> findByProviderId(String providerId);
     boolean existsByEmail(String email);
 
 

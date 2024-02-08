@@ -59,6 +59,17 @@ public class Member extends BaseTimeEntity {
         this.roleType = roleType;
     }
 
+    public Member(String name, String profileImage) {
+        this.name = name;
+        this.profileImage = profileImage;
+    }
+
+    public Member(Platform platform, String platformId, String profileImage){
+        this.platform = platform;
+        this.platformId = platformId;
+        this.profileImage = profileImage;
+    }
+
     public Member of(String email) {
         return Member.builder()
                 .email(email)
