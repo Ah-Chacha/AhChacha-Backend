@@ -7,6 +7,7 @@ import AhChacha.Backend.dto.response.sleep.SleepIdResponse;
 import AhChacha.Backend.dto.response.sleep.SleepResponse;
 import AhChacha.Backend.dto.response.sleep.SleepsResponse;
 import AhChacha.Backend.exception.notfound.NotFoundMemberException;
+import AhChacha.Backend.exception.notfound.NotFoundSleepException;
 import AhChacha.Backend.repository.MemberRepository;
 import AhChacha.Backend.repository.SleepRepository;
 import lombok.RequiredArgsConstructor;
@@ -45,5 +46,12 @@ public class SleepService {
                 .member(member)
                 .build();
         return new SleepIdResponse(sleepRepository.save(sleep).getId());
+    }
+
+    @Transactional
+    public SleepIdResponse update(Long id, SleepRequest request) {
+        Sleep sleep = sleepRepository.findById(id).orElseThrow(NotFoundSleepException::new);
+        sleep.update(request);
+        return new SleepIdResponse(sleep.getId());
     }
 }

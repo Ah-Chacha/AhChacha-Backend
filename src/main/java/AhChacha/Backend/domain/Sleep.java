@@ -1,5 +1,6 @@
 package AhChacha.Backend.domain;
 
+import AhChacha.Backend.dto.request.SleepRequest;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,5 +42,11 @@ public class Sleep extends BaseTimeEntity {
         this.endTime = endTime;
         this.quality = quality;
         this.member = member;
+    }
+
+    public void update(SleepRequest request) {
+        startTime = request.getStartTime();
+        endTime = request.getEndTime();
+        quality = request.getQuality();
     }
 }

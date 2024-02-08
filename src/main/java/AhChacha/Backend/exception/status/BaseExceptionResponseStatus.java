@@ -23,7 +23,11 @@ public enum BaseExceptionResponseStatus implements ResponseStatus{
      */
     BAD_REQUEST(3000, HttpStatus.BAD_REQUEST, "유효하지 않은 요청입니다."),
     BAD_URL(3001, HttpStatus.NOT_FOUND, "유효하지 않은 URL입니다."),
-    BAD_HTTPMETHOD(3002, HttpStatus.METHOD_NOT_ALLOWED, "해당 URL에서 지원하지 않는 HTTP Method 입니다."),
+    BAD_HTTP_METHOD(3002, HttpStatus.METHOD_NOT_ALLOWED, "해당 URL에서 지원하지 않는 HTTP Method 입니다."),
+    SLEEP_NOT_FOUND(3003, HttpStatus.NOT_FOUND, "존재하지 않는 수면 기록입니다."),
+    BLOOD_NOT_FOUND(3004, HttpStatus.NOT_FOUND, "존재하지 않는 심혈관 기록입니다."),
+    EXERCISE_NOT_FOUND(3005, HttpStatus.NOT_FOUND, "존재하지 않는 운동 기록입니다."),
+    HABIT_NOT_FOUND(3006, HttpStatus.NOT_FOUND, "존재하지 않는 습관 기록입니다."),
 
     /*
      * code 4000번대 : Authorization 오류
