@@ -40,8 +40,8 @@ public class SleepService {
     public SleepIdResponse save(SleepRequest sleepRequest, Long memberId) {
         Member member = validateMemberId(memberId);
         Sleep sleep = Sleep.builder()
-                .startTime(sleepRequest.getStartTime().toLocalDateTime())
-                .endTime(sleepRequest.getEndTime().toLocalDateTime())
+                .startTime(sleepRequest.getStartTime())
+                .endTime(sleepRequest.getEndTime())
                 .quality(sleepRequest.getQuality())
                 .member(member)
                 .build();
@@ -54,4 +54,6 @@ public class SleepService {
         sleep.update(request);
         return new SleepIdResponse(sleep.getId());
     }
+
+
 }
