@@ -56,4 +56,8 @@ public class SleepService {
     }
 
 
+    public void delete(Long id) {
+        Sleep sleep = sleepRepository.findById(id).orElseThrow(NotFoundSleepException::new);
+        sleepRepository.delete(sleep);
+    }
 }
