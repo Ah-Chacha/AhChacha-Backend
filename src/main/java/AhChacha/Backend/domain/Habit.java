@@ -1,11 +1,10 @@
 package AhChacha.Backend.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
-
-import java.sql.Timestamp;
 
 @Entity
 @Getter
@@ -15,7 +14,7 @@ public class Habit extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "habit_id", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long habitId;
 
     @Comment("예방 음식 섭취 개수")
@@ -33,6 +32,15 @@ public class Habit extends BaseTimeEntity {
     private int readingTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private Member memberId;
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @Builder
+    public Habit(int foodNum, boolean alcohol, int alcoholQuantity, int readingTime, Member member) {
+        this.foodNum = foodNum;
+        this.alcohol = alcohol;
+        this.alcoholQuantity = alcoholQuantity;
+        this.readingTime = readingTime;
+        this.member = member;
+    }
 }

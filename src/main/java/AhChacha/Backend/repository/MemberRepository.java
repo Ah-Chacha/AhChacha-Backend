@@ -2,7 +2,7 @@ package AhChacha.Backend.repository;
 
 
 import AhChacha.Backend.domain.Member;
-import AhChacha.Backend.domain.Provider;
+import AhChacha.Backend.domain.Platform;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,10 +15,10 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
 
+    Optional<Member> findByPlatformAndPlatformId(Platform platform, String providerId);
 
-    Optional<Member> findByProviderAndProviderId(Provider provider, String providerId);
+    Optional<Member> findByPlatformId(String providerId);
 
-    Optional<Member> findByProviderId(String providerId);
     boolean existsByEmail(String email);
 
 

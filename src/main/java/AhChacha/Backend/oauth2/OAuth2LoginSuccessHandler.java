@@ -1,7 +1,7 @@
 package AhChacha.Backend.oauth2;
 
 import AhChacha.Backend.dto.response.TokenResponse;
-import AhChacha.Backend.domain.Provider;
+import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.domain.RefreshToken;
 import AhChacha.Backend.domain.RoleType;
 import AhChacha.Backend.jwt.TokenProvider;
@@ -63,9 +63,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
 
 
-                Provider provider = customOAuth2User.getProvider();
-                response.sendRedirect("/auth/sign-up/"+provider+"/"+authentication.getName());
-                System.out.println("/auth/sign-up/"+provider+"/"+authentication.getName());
+                Platform platform = customOAuth2User.getPlatform();
+                response.sendRedirect("/auth/sign-up/"+ platform +"/"+authentication.getName());
+                System.out.println("/auth/sign-up/"+ platform +"/"+authentication.getName());
                 //회원가입 화면으로 redirect
                 //refreshTokenRepository.save(refreshToken);
                 //System.out.println("result = " + result);

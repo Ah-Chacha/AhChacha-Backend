@@ -1,6 +1,6 @@
-package AhChacha.Backend.dto;
+package AhChacha.Backend.dto.response;
 
-import AhChacha.Backend.domain.Provider;
+import AhChacha.Backend.domain.Platform;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OAuth2TokenResponse {
     private String access_token;
-    private Provider provider;
+    private Platform platform;
     private String id;
 
 

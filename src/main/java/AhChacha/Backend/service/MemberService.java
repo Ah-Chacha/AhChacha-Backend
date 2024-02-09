@@ -1,7 +1,7 @@
 package AhChacha.Backend.service;
 
 import AhChacha.Backend.domain.Member;
-import AhChacha.Backend.domain.Provider;
+import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.domain.RefreshToken;
 import AhChacha.Backend.dto.request.LoginRequest;
 import AhChacha.Backend.dto.request.SignUpRequest;
@@ -22,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
@@ -40,7 +39,6 @@ public class MemberService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final PasswordEncoder passwordEncoder;
 
 
     //토큰 만료 시 처리에 관한 작업 필요함
@@ -73,28 +71,19 @@ public class MemberService {
         try {
             String id = (String) jsonObject.get("id");
             String name = (String) jsonObject.get("name");
-            String picture = (String) jsonObject.get("picture");
+            String profileImage = (String) jsonObject.get("picture");
             System.out.println("id = " + id);
-            if (memberRepository.findByProviderId(id).isPresent()) {
-                Optional<Member> optionalMember = memberRepository.findByProviderId(id);
-//                if(member1.isPresent()) {
+            if (memberRepository.findByPlatformId(id).isPresent()) {
+                Optional<Member> optionalMember = memberRepository.findByPlatformId(id);
                 Member existingMember = optionalMember.get();
-                TokenResponse tokenResponse = tokenProvider.generateTokenResponseByAuthName(id, Provider.GOOGLE, existingMember.getId());
+                TokenResponse tokenResponse = tokenProvider.generateTokenResponseByAuthName(id, Platform.GOOGLE, existingMember.getId());
                 return saveRefreshToken(tokenResponse, id);
-//                } else {
-//                    try {
-//                        throw new Exception();
-//                    } catch (Exception e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
+
             } else {
-                Member member = Member.builder()     //처음
-                        .name(name)
-                        .profileImage(picture)
-                        .build();
+                Member member = new Member(name, profileImage);
+
                 memberRepository.save(member);
-                TokenResponse tokenResponse = tokenProvider.generateTokenResponseByAuthName(id, Provider.GOOGLE, member.getId());
+                TokenResponse tokenResponse = tokenProvider.generateTokenResponseByAuthName(id, Platform.GOOGLE, member.getId());
                 return saveRefreshToken(tokenResponse, id);
             }
         } catch (JSONException e) {
@@ -113,7 +102,7 @@ public class MemberService {
 
 
     @Transactional
-    public SignUpResponse signUp(SignUpRequest signUpRequest, Provider provider, String id) throws Exception {
+    public SignUpResponse signUp(SignUpRequest signUpRequest, Platform platform, String id) throws Exception {
 
         /*
         //JWT 발급
@@ -127,15 +116,15 @@ public class MemberService {
 
         //이메일 중첩 확인 등등 해야댐
 
-        Optional<Member> member = memberRepository.findByProviderAndProviderId(provider, id);
+        Optional<Member> member = memberRepository.findByPlatformAndPlatformId(platform, id);
 
         if (member.isPresent()) {
             Member existingMember = member.get();
             String provider_to_string = "";
 
-            if (provider.toString().equals("GOOGLE")) {
+            if (platform.toString().equals("GOOGLE")) {
                 provider_to_string = "GOOGLE";
-            } else if (provider.toString().equals("KAKAO")) {
+            } else if (platform.toString().equals("KAKAO")) {
                 provider_to_string = "KAKAO";
             }
 
@@ -251,7 +240,7 @@ public class MemberService {
             throw new RuntimeException("이미 가입된 사용자입니다.");
         }
 
-        Member member = signUpRequest.toMember(passwordEncoder);
+        Member member = signUpRequest.toMember();
 
         return SignUpResponse.of(memberRepository.save(member));
     }

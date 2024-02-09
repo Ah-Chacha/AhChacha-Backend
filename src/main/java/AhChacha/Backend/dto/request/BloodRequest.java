@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 public class BloodRequest {
     private Long id;
 
-    private Timestamp measureTime;
+    private LocalDateTime measureTime;
 
     private int systolicPressure;   //수축기 혈압
 

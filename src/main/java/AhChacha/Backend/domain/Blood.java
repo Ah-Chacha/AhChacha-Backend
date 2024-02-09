@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
-import java.sql.Timestamp;
-
 @Entity
 @Getter
 @NoArgsConstructor
@@ -18,9 +16,6 @@ public class Blood extends BaseTimeEntity {
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @Column(name = "mesure_time", nullable = false)
-    private Timestamp measureTime;
 
     @Comment("수축기 혈압")
     @Column(name = "systolic_pressure", nullable = false)
@@ -46,10 +41,9 @@ public class Blood extends BaseTimeEntity {
     private Member member;
 
     @Builder
-    public Blood(Member member, Timestamp measureTime, int systolicPressure, int diastolicPressure,
+    public Blood(Member member, int systolicPressure, int diastolicPressure,
                  int heartRate, int bloodSugar, int cholesterol) {
         this.member = member;
-        this.measureTime = measureTime;
         this.systolicPressure = systolicPressure;
         this.diastolicPressure = diastolicPressure;
         this.heartRate = heartRate;

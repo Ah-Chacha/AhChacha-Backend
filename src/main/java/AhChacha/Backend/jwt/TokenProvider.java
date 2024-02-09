@@ -1,7 +1,7 @@
 package AhChacha.Backend.jwt;
 
 
-import AhChacha.Backend.domain.Provider;
+import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.dto.response.TokenResponse;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -43,7 +43,7 @@ public class TokenProvider {
     }
 
 
-    public TokenResponse generateTokenResponseByAuthName(String name, Provider provider, Long memberId) {
+    public TokenResponse generateTokenResponseByAuthName(String name, Platform platform, Long memberId) {
         long now = (new Date()).getTime();
 
         // Access Token 생성
@@ -67,7 +67,7 @@ public class TokenProvider {
                 .accessToken(accessToken)
                 .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
                 .refreshToken(refreshToken)
-                .provider(provider)
+                .platform(platform)
                 .id(name)
                 .member_id(memberId)
                 .build();

@@ -1,6 +1,6 @@
 package AhChacha.Backend.oauth2;
 
-import AhChacha.Backend.domain.Provider;
+import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.domain.RoleType;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,12 +26,12 @@ public class CustomOAuth2User extends DefaultOAuth2User {
     //private String email;
     private RoleType roleType;
 
-    private Provider provider;
-    public CustomOAuth2User(Collection<? extends GrantedAuthority> authorities, Map<String, Object> attributes, String nameAttributeKey, Provider provider, RoleType roleType) {
+    private Platform platform;
+    public CustomOAuth2User(Collection<? extends GrantedAuthority> authorities, Map<String, Object> attributes, String nameAttributeKey, Platform platform, RoleType roleType) {
         super(authorities, attributes, nameAttributeKey);
         System.out.println("authorities = " + authorities);
         //this.email = email;
-        this.provider = provider;
+        this.platform = platform;
         this.roleType = roleType;
     }
 

@@ -1,7 +1,7 @@
 package AhChacha.Backend.controller;
 
 
-import AhChacha.Backend.domain.Provider;
+import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.dto.request.SignUpRequest;
 import AhChacha.Backend.repository.MemberRepository;
 import AhChacha.Backend.service.CustomOAuth2UserService;
@@ -58,17 +58,17 @@ public class AuthController {
 
 
     @PostMapping("/sign-up/{provider}/{id}")
-    public ResponseEntity<SignUpResponse> signUp(@PathVariable("provider") Provider provider, @PathVariable("id") String id, @RequestBody SignUpRequest signUpRequest) throws Exception {
-        System.out.println("provider = " + provider);
+    public ResponseEntity<SignUpResponse> signUp(@PathVariable("provider") Platform platform, @PathVariable("id") String id, @RequestBody SignUpRequest signUpRequest) throws Exception {
+        System.out.println("provider = " + platform);
         System.out.println("id = " + id);
-        return ResponseEntity.ok(memberService.signUp(signUpRequest, provider, id));
+        return ResponseEntity.ok(memberService.signUp(signUpRequest, platform, id));
     }
 
 
     @GetMapping("/sign-up/{provider}/{id}")
-    public String signUp1(@PathVariable("provider") Provider provider, @PathVariable("id") String id) throws Exception {
+    public String signUp1(@PathVariable("provider") Platform platform, @PathVariable("id") String id) throws Exception {
         //memberService.signUp(signUpDto, provider, id);
-        System.out.println("provider = " + provider);
+        System.out.println("provider = " + platform);
         System.out.println("id = " + id);
         TokenResponse tokenResponse;
 

@@ -13,12 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SignUpRequest {
 
     private String email;
-    private String password;
 
-    public Member toMember(PasswordEncoder passwordEncoder) {
+    public Member toMember() {
         return Member.builder()
                 .email(email)
-                .password(password)
                 .build();
     }
 

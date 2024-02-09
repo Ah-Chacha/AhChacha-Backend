@@ -1,9 +1,9 @@
 package AhChacha.Backend.service;
 
 import AhChacha.Backend.domain.Member;
-import AhChacha.Backend.domain.Provider;
+import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.oauth2.CustomOAuth2User;
-import AhChacha.Backend.dto.request.OAuth2Attributes;
+import AhChacha.Backend.dto.request.OAuth2AttributesRequest;
 import AhChacha.Backend.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,43 +40,43 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         System.out.println("In loadUser!!!!!!!!!!!!!!!!!");
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        Provider provider = getProvider(registrationId);
-        System.out.println("platform = " + provider);
+        Platform platform = getProvider(registrationId);
+        System.out.println("platform = " + platform);
         String userNameAttributeName = userRequest.getClientRegistration()
                 .getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
-        OAuth2Attributes extractAttributes = OAuth2Attributes.of(provider, userNameAttributeName, attributes);
+        OAuth2AttributesRequest extractAttributes = OAuth2AttributesRequest.of(platform, userNameAttributeName, attributes);
 
-        Member createdMember = getMember(extractAttributes, provider);
+        Member createdMember = getMember(extractAttributes, platform);
 
         return new CustomOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(createdMember.getRoleType().getKey())),
                 attributes,
                 extractAttributes.getNameAttributeKey(),
-                createdMember.getProvider(),
+                createdMember.getPlatform(),
                 createdMember.getRoleType()
         );
     }
-    private Member getMember(OAuth2Attributes extractAttributes, Provider provider) {
-        Member findMember = memberRepository.findByProviderAndProviderId(provider,
+    private Member getMember(OAuth2AttributesRequest extractAttributes, Platform platform) {
+        Member findMember = memberRepository.findByPlatformAndPlatformId(platform,
                 extractAttributes.getOAuth2UserInfo().getId()).orElse(null);
         if(findMember == null) {
-            return saveMember(extractAttributes, provider);
+            return saveMember(extractAttributes, platform);
         }
         return findMember;
     }
 
     @Transactional
-    public Member saveMember(OAuth2Attributes extractAttributes, Provider provider) {
-        Member createdMember = extractAttributes.toMember(provider, extractAttributes.getOAuth2UserInfo());
+    public Member saveMember(OAuth2AttributesRequest extractAttributes, Platform platform) {
+        Member createdMember = extractAttributes.toMember(platform);
         return memberRepository.save(createdMember);
     }
 
-    private Provider getProvider(String registrationId) {
+    private Platform getProvider(String registrationId) {
         /*if(KAKAO.equals(registrationId)) {
             return Platform.KAKAO;
         }*/
-        return Provider.GOOGLE;
+        return Platform.GOOGLE;
     }
 }

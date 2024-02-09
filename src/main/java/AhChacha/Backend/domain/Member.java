@@ -1,12 +1,11 @@
 package AhChacha.Backend.domain;
 
-import AhChacha.Backend.converter.ProviderConverter;
-import jakarta.annotation.Nullable;
+import AhChacha.Backend.converter.PlatformConverter;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,51 +18,56 @@ public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Convert(converter = PlatformConverter.class)
+    private Platform platform;
+
+    private String platformId;
+
     private String name;
 
-    @Column(name = "email")
     private String email;
 
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "status")
     private String status = STATUS_ACTIVE;
 
-    @Column(name = "role_type")
     @Enumerated(value = EnumType.STRING)
     private RoleType roleType;
 
-    @Nullable
-    @Column(name = "profile_image")
     private String profileImage = DEFAULT_PROFILE_ROOT;
 
-    @Nullable
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    @Setter
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    private PatientInfo patientInfo;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Blood> bloods = new ArrayList<>();
 
-    @Column(name = "platform")
-    @Convert(converter = ProviderConverter.class)
-    private Provider provider;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Exercise> exercises = new ArrayList<>();
 
-    @Column(name = "platform_id")
-    private String providerId;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Habit> habits = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Sleep> sleeps = new ArrayList<>();
 
     @Builder
-    public Member(String name, String profileImage, String phoneNumber,
-                  String email, String password, RoleType roleType) {
+    public Member(String name, String email, RoleType roleType) {
+        this.name = name;
+        this.email = email;
+        this.roleType = roleType;
+    }
+
+    public Member(String name, String profileImage) {
         this.name = name;
         this.profileImage = profileImage;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.password = password;
-        this.roleType = roleType;
+    }
+
+    public Member(Platform platform, String platformId, String profileImage){
+        this.platform = platform;
+        this.platformId = platformId;
+        this.profileImage = profileImage;
     }
 
     public Member of(String email) {

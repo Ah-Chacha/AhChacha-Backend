@@ -1,4 +1,4 @@
-package AhChacha.Backend.dto.response.status;
+package AhChacha.Backend.exception.status;
 
 import org.springframework.http.HttpStatus;
 

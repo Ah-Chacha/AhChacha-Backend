@@ -1,5 +1,8 @@
 package AhChacha.Backend.oauth2.userinfo;
 
+import AhChacha.Backend.domain.Member;
+import AhChacha.Backend.domain.Platform;
+
 import java.util.Map;
 
 public abstract class OAuth2UserInfo {
@@ -11,6 +14,6 @@ public abstract class OAuth2UserInfo {
 
     public abstract String getId();
 
-    public abstract String getNickname();
     public abstract String getProfileImageUrl();
+
 }
