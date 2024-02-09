@@ -1,5 +1,6 @@
 package AhChacha.Backend.domain;
 
+import AhChacha.Backend.dto.exercise.request.ExerciseRequest;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,6 +34,11 @@ public class Exercise extends BaseTimeEntity {
         this.quantity = quantity;
         this.type = type;
         this.member = member;
+    }
+
+    public void update(ExerciseRequest request){
+        quantity = request.getQuantity();
+        type = request.getType();
     }
 
 }

@@ -3,11 +3,11 @@ package AhChacha.Backend.service;
 import AhChacha.Backend.domain.Member;
 import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.domain.RefreshToken;
-import AhChacha.Backend.dto.request.LoginRequest;
-import AhChacha.Backend.dto.request.SignUpRequest;
-import AhChacha.Backend.dto.request.TokenRequest;
-import AhChacha.Backend.dto.response.SignUpResponse;
-import AhChacha.Backend.dto.response.TokenResponse;
+import AhChacha.Backend.dto.oauth.request.LoginRequest;
+import AhChacha.Backend.dto.oauth.request.SignUpRequest;
+import AhChacha.Backend.dto.oauth.request.TokenRequest;
+import AhChacha.Backend.dto.oauth.response.SignUpResponse;
+import AhChacha.Backend.dto.oauth.response.TokenResponse;
 import AhChacha.Backend.jwt.TokenProvider;
 import AhChacha.Backend.repository.MemberRepository;
 import AhChacha.Backend.repository.RefreshTokenRepository;
@@ -235,7 +235,7 @@ public class MemberService {
     }
 
     @Transactional
-    public SignUpResponse signUpWithEmail(AhChacha.Backend.dto.request.SignUpRequest signUpRequest) {
+    public SignUpResponse signUpWithEmail(SignUpRequest signUpRequest) {
         if (memberRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new RuntimeException("이미 가입된 사용자입니다.");
         }

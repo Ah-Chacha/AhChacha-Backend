@@ -2,15 +2,15 @@ package AhChacha.Backend.controller;
 
 
 import AhChacha.Backend.domain.Platform;
-import AhChacha.Backend.dto.request.SignUpRequest;
+import AhChacha.Backend.dto.oauth.request.SignUpRequest;
 import AhChacha.Backend.repository.MemberRepository;
 import AhChacha.Backend.service.CustomOAuth2UserService;
 import AhChacha.Backend.service.MemberService;
-import AhChacha.Backend.dto.request.LoginRequest;
-import AhChacha.Backend.dto.request.OAuth2TokenRequest;
-import AhChacha.Backend.dto.request.TokenRequest;
-import AhChacha.Backend.dto.response.SignUpResponse;
-import AhChacha.Backend.dto.response.TokenResponse;
+import AhChacha.Backend.dto.oauth.request.LoginRequest;
+import AhChacha.Backend.dto.oauth.request.OAuth2TokenRequest;
+import AhChacha.Backend.dto.oauth.request.TokenRequest;
+import AhChacha.Backend.dto.oauth.response.SignUpResponse;
+import AhChacha.Backend.dto.oauth.response.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +46,7 @@ public class AuthController {
 
 
     @PostMapping("/sign-up/general")
-    public ResponseEntity<SignUpResponse> signUpWithEmail(@RequestBody AhChacha.Backend.dto.request.SignUpRequest signUpRequest) {
+    public ResponseEntity<SignUpResponse> signUpWithEmail(@RequestBody SignUpRequest signUpRequest) {
         return ResponseEntity.ok(memberService.signUpWithEmail(signUpRequest));
     }
 

@@ -1,8 +1,12 @@
 package AhChacha.Backend.service;
 
-import AhChacha.Backend.dto.request.BloodRequest;
 import AhChacha.Backend.domain.Blood;
 import AhChacha.Backend.domain.Member;
+import AhChacha.Backend.dto.blood.request.BloodRequest;
+import AhChacha.Backend.dto.blood.response.BloodIdResponse;
+import AhChacha.Backend.dto.blood.response.BloodResponse;
+import AhChacha.Backend.dto.blood.response.BloodsResponse;
+import AhChacha.Backend.exception.NotFoundException;
 import AhChacha.Backend.repository.BloodRepository;
 import AhChacha.Backend.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.util.Optional;
+import java.util.List;
+
+import static AhChacha.Backend.exception.status.BaseExceptionResponseStatus.BLOOD_NOT_FOUND;
+import static AhChacha.Backend.exception.status.BaseExceptionResponseStatus.USER_NOT_FOUND;
 
 @Service
 @Slf4j
@@ -21,42 +27,36 @@ public class BloodService {
     private final BloodRepository bloodRepository;
     private final MemberRepository memberRepository;
 
-    //등록
     @Transactional
-    public String createBlood(BloodRequest bloodRequest, Long id){
-        Optional<Member> member = memberRepository.findById(id);
-        if(member.isPresent()){
-            Member existingMember = member.get();
-            Blood blood = Blood.builder()
-                    .member(existingMember)
-                    .systolicPressure(bloodRequest.getSystolicPressure())
-                    .diastolicPressure(bloodRequest.getDiastolicPressure())
-                    .heartRate(bloodRequest.getHeartRate())
-                    .build();
-            bloodRepository.save(blood);
-        }else {
-            try {
-                throw new Exception();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return "혈액 데이터 등록";
+    public BloodIdResponse save(Long memberId, BloodRequest request) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        Blood blood = Blood.of(member, request);
+        return new BloodIdResponse(bloodRepository.save(blood).getId());
     }
 
-    //조회
-    public String findBlood(){
-        return "혈액 데이터 조회";
+    public BloodsResponse findAll(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        List<Blood> bloods = bloodRepository.findAllByMember(member);
 
+        return new BloodsResponse(bloods.stream()
+                .map(BloodResponse::of)
+                .toList());
     }
 
-    //수정
-    public String updateBlood(BloodRequest bloodRequest, Long id){
-        return "혈액 데이터 수정";
+    @Transactional
+    public BloodIdResponse update(BloodRequest request, Long id) {
+        Blood blood = bloodRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(BLOOD_NOT_FOUND));
+        blood.update(request);
+        return new BloodIdResponse(blood.getId());
     }
 
-    //삭제
-    public String deleteBlood(Long id, Timestamp time){
-        return "혈액 데이터 삭제";
+    @Transactional
+    public void delete(Long id) {
+        Blood blood = bloodRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(BLOOD_NOT_FOUND));
+        bloodRepository.delete(blood);
     }
 }

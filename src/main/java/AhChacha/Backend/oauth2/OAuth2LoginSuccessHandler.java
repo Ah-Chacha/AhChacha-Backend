@@ -1,6 +1,6 @@
 package AhChacha.Backend.oauth2;
 
-import AhChacha.Backend.dto.response.TokenResponse;
+import AhChacha.Backend.dto.oauth.response.TokenResponse;
 import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.domain.RefreshToken;
 import AhChacha.Backend.domain.RoleType;

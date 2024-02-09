@@ -1,9 +1,9 @@
 package AhChacha.Backend.controller;
 
 
-import AhChacha.Backend.dto.request.SleepRequest;
-import AhChacha.Backend.dto.response.sleep.SleepIdResponse;
-import AhChacha.Backend.dto.response.sleep.SleepsResponse;
+import AhChacha.Backend.dto.sleep.request.SleepRequest;
+import AhChacha.Backend.dto.sleep.response.SleepIdResponse;
+import AhChacha.Backend.dto.sleep.response.SleepsResponse;
 import AhChacha.Backend.service.SleepService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

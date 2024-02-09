@@ -2,12 +2,11 @@ package AhChacha.Backend.service;
 
 import AhChacha.Backend.domain.Member;
 import AhChacha.Backend.domain.Sleep;
-import AhChacha.Backend.dto.request.SleepRequest;
-import AhChacha.Backend.dto.response.sleep.SleepIdResponse;
-import AhChacha.Backend.dto.response.sleep.SleepResponse;
-import AhChacha.Backend.dto.response.sleep.SleepsResponse;
-import AhChacha.Backend.exception.notfound.NotFoundMemberException;
-import AhChacha.Backend.exception.notfound.NotFoundSleepException;
+import AhChacha.Backend.dto.sleep.request.SleepRequest;
+import AhChacha.Backend.dto.sleep.response.SleepIdResponse;
+import AhChacha.Backend.dto.sleep.response.SleepResponse;
+import AhChacha.Backend.dto.sleep.response.SleepsResponse;
+import AhChacha.Backend.exception.NotFoundException;
 import AhChacha.Backend.repository.MemberRepository;
 import AhChacha.Backend.repository.SleepRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static AhChacha.Backend.exception.status.BaseExceptionResponseStatus.SLEEP_NOT_FOUND;
+import static AhChacha.Backend.exception.status.BaseExceptionResponseStatus.USER_NOT_FOUND;
 
 @Service
 @Slf4j
@@ -33,7 +35,7 @@ public class SleepService {
     }
 
     private Member validateMemberId(Long id) {
-        return memberRepository.findById(id).orElseThrow(NotFoundMemberException::new);
+        return memberRepository.findById(id).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
     }
 
     @Transactional
@@ -50,14 +52,16 @@ public class SleepService {
 
     @Transactional
     public SleepIdResponse update(Long id, SleepRequest request) {
-        Sleep sleep = sleepRepository.findById(id).orElseThrow(NotFoundSleepException::new);
+        Sleep sleep = sleepRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(SLEEP_NOT_FOUND));
         sleep.update(request);
         return new SleepIdResponse(sleep.getId());
     }
 
 
     public void delete(Long id) {
-        Sleep sleep = sleepRepository.findById(id).orElseThrow(NotFoundSleepException::new);
+        Sleep sleep = sleepRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(SLEEP_NOT_FOUND));
         sleepRepository.delete(sleep);
     }
 }
