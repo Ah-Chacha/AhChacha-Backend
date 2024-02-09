@@ -1,6 +1,5 @@
-package AhChacha.Backend.exception.badrequest;
+package AhChacha.Backend.exception;
 
-import AhChacha.Backend.exception.AhchachaException;
 import AhChacha.Backend.exception.status.BaseExceptionResponseStatus;
 
 public class BadRequestException extends AhchachaException {

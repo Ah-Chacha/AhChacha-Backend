@@ -1,6 +1,6 @@
 package AhChacha.Backend.domain;
 
-import AhChacha.Backend.dto.request.SleepRequest;
+import AhChacha.Backend.dto.sleep.request.SleepRequest;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

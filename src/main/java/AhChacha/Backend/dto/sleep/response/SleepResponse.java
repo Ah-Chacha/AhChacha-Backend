@@ -1,10 +1,9 @@
-package AhChacha.Backend.dto.response.sleep;
+package AhChacha.Backend.dto.sleep.response;
 
 import AhChacha.Backend.domain.Sleep;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

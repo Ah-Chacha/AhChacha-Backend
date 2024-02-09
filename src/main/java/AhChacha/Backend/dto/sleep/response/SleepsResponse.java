@@ -1,4 +1,4 @@
-package AhChacha.Backend.dto.response.sleep;
+package AhChacha.Backend.dto.sleep.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
