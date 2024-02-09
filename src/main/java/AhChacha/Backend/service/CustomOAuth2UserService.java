@@ -3,7 +3,7 @@ package AhChacha.Backend.service;
 import AhChacha.Backend.domain.Member;
 import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.oauth2.CustomOAuth2User;
-import AhChacha.Backend.dto.request.OAuth2AttributesRequest;
+import AhChacha.Backend.dto.oauth.request.OAuth2AttributesRequest;
 import AhChacha.Backend.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

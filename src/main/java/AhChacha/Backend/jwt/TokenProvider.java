@@ -2,7 +2,7 @@ package AhChacha.Backend.jwt;
 
 
 import AhChacha.Backend.domain.Platform;
-import AhChacha.Backend.dto.response.TokenResponse;
+import AhChacha.Backend.dto.oauth.response.TokenResponse;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

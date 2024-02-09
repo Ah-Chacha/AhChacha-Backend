@@ -1,4 +1,4 @@
-package AhChacha.Backend.dto.request;
+package AhChacha.Backend.dto.oauth.request;
 
 
 import AhChacha.Backend.domain.Member;

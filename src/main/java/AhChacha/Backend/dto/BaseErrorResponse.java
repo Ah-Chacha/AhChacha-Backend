@@ -1,4 +1,4 @@
-package AhChacha.Backend.dto.response;
+package AhChacha.Backend.dto;
 
 import AhChacha.Backend.exception.status.ResponseStatus;
 import lombok.NoArgsConstructor;

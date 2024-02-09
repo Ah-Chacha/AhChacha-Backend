@@ -1,4 +1,4 @@
-package AhChacha.Backend.dto.request;
+package AhChacha.Backend.dto.oauth.request;
 
 import AhChacha.Backend.domain.Member;
 import AhChacha.Backend.domain.Platform;
@@ -7,7 +7,6 @@ import AhChacha.Backend.oauth2.userinfo.OAuth2UserInfo;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.sql.Timestamp;
 import java.util.Map;
 
 @Getter

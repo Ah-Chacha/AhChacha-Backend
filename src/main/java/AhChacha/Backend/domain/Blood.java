@@ -1,5 +1,6 @@
 package AhChacha.Backend.domain;
 
+import AhChacha.Backend.dto.blood.request.BloodRequest;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,5 +50,24 @@ public class Blood extends BaseTimeEntity {
         this.heartRate = heartRate;
         this.bloodSugar = bloodSugar;
         this.cholesterol = cholesterol;
+    }
+
+    public static Blood of(Member member, BloodRequest request) {
+        return Blood.builder()
+                .member(member)
+                .systolicPressure(request.getSystolicPressure())
+                .diastolicPressure(request.getDiastolicPressure())
+                .heartRate(request.getHeartRate())
+                .bloodSugar(request.getBloodSugar())
+                .cholesterol(request.getCholesterol())
+                .build();
+    }
+
+    public void update(BloodRequest request) {
+        this.systolicPressure = request.getSystolicPressure();
+        this.diastolicPressure = request.getDiastolicPressure();
+        this.heartRate = request.getHeartRate();
+        this.bloodSugar = request.getBloodSugar();
+        this.cholesterol = request.getCholesterol();
     }
 }

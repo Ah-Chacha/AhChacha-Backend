@@ -1,4 +1,4 @@
-package AhChacha.Backend.dto.response;
+package AhChacha.Backend.dto.oauth.response;
 
 import AhChacha.Backend.domain.Member;
 import lombok.AllArgsConstructor;
