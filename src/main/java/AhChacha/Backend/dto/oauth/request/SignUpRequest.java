@@ -2,6 +2,7 @@ package AhChacha.Backend.dto.oauth.request;
 
 
 import AhChacha.Backend.domain.Member;
+import AhChacha.Backend.domain.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,13 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @NoArgsConstructor
 public class SignUpRequest {
 
-    private String email;
-
-    public Member toMember() {
-        return Member.builder()
-                .email(email)
-                .build();
-    }
-
+    private String roleType;
 
 }

@@ -8,6 +8,7 @@ import AhChacha.Backend.dto.oauth.request.SignUpRequest;
 import AhChacha.Backend.dto.oauth.request.TokenRequest;
 import AhChacha.Backend.dto.oauth.response.SignUpResponse;
 import AhChacha.Backend.dto.oauth.response.TokenResponse;
+import AhChacha.Backend.exception.NotFoundException;
 import AhChacha.Backend.jwt.TokenProvider;
 import AhChacha.Backend.repository.MemberRepository;
 import AhChacha.Backend.repository.RefreshTokenRepository;
@@ -28,6 +29,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
+
+import static AhChacha.Backend.exception.status.BaseExceptionResponseStatus.USER_NOT_FOUND;
 
 @Service
 @Slf4j
@@ -102,7 +105,7 @@ public class MemberService {
 
 
     @Transactional
-    public SignUpResponse signUp(SignUpRequest signUpRequest, Platform platform, String id) throws Exception {
+    public TokenResponse signUp(SignUpRequest signUpRequest, Platform platform, String id) throws Exception {
 
         /*
         //JWT 발급
@@ -116,67 +119,33 @@ public class MemberService {
 
         //이메일 중첩 확인 등등 해야댐
 
-        Optional<Member> member = memberRepository.findByPlatformAndPlatformId(platform, id);
+        Member member = memberRepository.findByPlatformAndPlatformId(platform, id)
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        System.out.println("member = " + member);
 
-        if (member.isPresent()) {
-            Member existingMember = member.get();
-            String provider_to_string = "";
+        String platform_to_string = "";
 
-            if (platform.toString().equals("GOOGLE")) {
-                provider_to_string = "GOOGLE";
-            } else if (platform.toString().equals("KAKAO")) {
-                provider_to_string = "KAKAO";
-            }
-
-//            String gender_to_string = "";
-//            if (signUpRequest.getGender().toString().equals("MAN")) {
-//                gender_to_string = "MAN";
-//            } else if (signUpRequest.getGender().toString().equals("WOMAN")) {
-//                gender_to_string = "WOMAN";
-//            }
-//
-//            memberRepository.updateMember(signUpRequest.getAge(), signUpRequest.getHeight(), gender_to_string, signUpRequest.getWeight(), provider_to_string, id);
-
-            return SignUpResponse.of(existingMember);
-
-        } else {
-            try {
-                throw new Exception();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        if (platform.toString().equals("GOOGLE")) {
+            platform_to_string = "GOOGLE";
+        } else if (platform.toString().equals("KAKAO")) {
+            platform_to_string = "KAKAO";
         }
 
-        /*String provider_to_string = "";
 
-        if(provider.toString().equals("GOOGLE")) {
-            provider_to_string = "GOOGLE";
-        } else if (provider.toString().equals("KAKAO")) {
-            provider_to_string = "KAKAO";
-        }
 
-        String gender_to_string = "";
-        if(signUpDto.getGender().toString().equals("MAN")) {
-            gender_to_string = "MAN";
-        } else if (signUpDto.getGender().toString().equals("WOMAN")) {
-            gender_to_string = "WOMAN";
-        }
 
-        memberRepository.updateMember(signUpDto.getAge(), signUpDto.getHeight(), gender_to_string, signUpDto.getWeight(), provider_to_string, id);
+        memberRepository.updateMember(signUpRequest.getRoleType(), platform_to_string, id);
         //System.out.println("signUpDto = " + signUpDto.getPhoneNumber());
 
+        //JWT 발급
+        TokenResponse tokenResponse = tokenProvider.generateTokenResponseByAuthName(id, platform, member.getId());
+        RefreshToken refreshToken = RefreshToken.builder()
+                .key(id)
+                .value(tokenResponse.getRefreshToken())
+                .build();
+        refreshTokenRepository.save(refreshToken);
 
-        /*Member member = Member.builder()
-                .email(signUpDto.getEmail())
-                .roleType(RoleType.USER)
-                .phoneNumber(signUpDto.getPhonenumber())
-                .build();*/
-
-        //memberRepository.save(member);
-
-        //memberRepository.findByProviderAndProviderId()
-
-        //return null;
+        return tokenResponse;
 
     }
 
@@ -234,6 +203,7 @@ public class MemberService {
         return tokenResponse;
     }
 
+    /* 추후 일반 로그인
     @Transactional
     public SignUpResponse signUpWithEmail(SignUpRequest signUpRequest) {
         if (memberRepository.existsByEmail(signUpRequest.getEmail())) {
@@ -243,7 +213,7 @@ public class MemberService {
         Member member = signUpRequest.toMember();
 
         return SignUpResponse.of(memberRepository.save(member));
-    }
+    }*/
 
     /*public TokenDto socialSignUp(SignUpDto signUpDto) {
 
