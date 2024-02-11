@@ -10,12 +10,16 @@ import AhChacha.Backend.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
 @EnableWebSecurity
@@ -31,7 +35,7 @@ public class SecurityConfig {
 
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
         http
                 .formLogin(AbstractHttpConfigurer::disable)// FormLogin 사용 X
                 .httpBasic(AbstractHttpConfigurer::disable)// httpBasic 사용 X
@@ -53,10 +57,17 @@ public class SecurityConfig {
 
                         // 아이콘, css, js 관련
                         // 기본 페이지, css, image, js 하위 폴더에 있는 자료들은 모두 접근 가능, h2-console에 접근 가능
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico", "/h2-console/**", "/profile").permitAll()
-                        .requestMatchers("/api/member/sign-up").permitAll() // 회원가입 접근 가능
-                        .requestMatchers("/auth/token").permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/css/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/images/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/js/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/favicon.ico")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/profile")).permitAll()
+                        //, "/js/**", "/favicon.ico", "/h2-console/**", "/profile")).permitAll()))
+                        //.requestMatchers("/api/member/sign-up").permitAll() // 회원가입 접근 가능
+                        //.requestMatchers("/auth/token").permitAll()
+                        .requestMatchers(new MvcRequestMatcher(introspector, "/api/member/sign-up")).permitAll()
                         .anyRequest().permitAll()) // 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
                 //== 소셜 로그인 설정 ==//
                 .oauth2Login(oauth2 -> oauth2
@@ -81,6 +92,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
 
 }

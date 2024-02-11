@@ -2,6 +2,7 @@ package AhChacha.Backend.dto.oauth.request;
 
 import AhChacha.Backend.domain.Member;
 import AhChacha.Backend.domain.Platform;
+import AhChacha.Backend.domain.RoleType;
 import AhChacha.Backend.oauth2.userinfo.GoogleOAuth2UserInfo;
 import AhChacha.Backend.oauth2.userinfo.OAuth2UserInfo;
 import lombok.Builder;
@@ -38,12 +39,15 @@ public class OAuth2AttributesRequest {
                 .build();
     }
 
-    public Member toMember(Platform platform) {
+    public Member toMember(Platform platform, OAuth2UserInfo oAuth2UserInfo) {
         System.out.println("platform = " + platform);
         return new Member(platform,
                 oAuth2UserInfo.getId(),
-                oAuth2UserInfo.getProfileImageUrl());
-
+                oAuth2UserInfo.getProfileImageUrl(),
+                RoleType.GUEST,
+                oAuth2UserInfo.getName(),
+                oAuth2UserInfo.getEmail()
+                );
     }
 
 }

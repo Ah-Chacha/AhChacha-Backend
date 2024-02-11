@@ -50,6 +50,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         Member createdMember = getMember(extractAttributes, platform);
 
+        System.out.println("createdMember.getRoleType() = " + createdMember.getRoleType());
+
         return new CustomOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(createdMember.getRoleType().getKey())),
                 attributes,
@@ -61,6 +63,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     private Member getMember(OAuth2AttributesRequest extractAttributes, Platform platform) {
         Member findMember = memberRepository.findByPlatformAndPlatformId(platform,
                 extractAttributes.getOAuth2UserInfo().getId()).orElse(null);
+        System.out.println("findMember = " + findMember);
         if(findMember == null) {
             return saveMember(extractAttributes, platform);
         }
@@ -69,7 +72,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     @Transactional
     public Member saveMember(OAuth2AttributesRequest extractAttributes, Platform platform) {
-        Member createdMember = extractAttributes.toMember(platform);
+        Member createdMember = extractAttributes.toMember(platform, extractAttributes.getOAuth2UserInfo());
+        System.out.println("createdMember = " + createdMember);
+        System.out.println("createdMember.getRoleType() = " + createdMember.getRoleType());
+        System.out.println("createdMember.getPlatform() = " + createdMember.getPlatform());
         return memberRepository.save(createdMember);
     }
 
