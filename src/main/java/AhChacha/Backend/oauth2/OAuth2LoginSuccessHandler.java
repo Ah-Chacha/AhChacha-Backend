@@ -45,18 +45,6 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
             System.out.println("authentication = " + authentication);
             if(customOAuth2User.getRoleType() == RoleType.GUEST) {
-                /*TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
-                RefreshToken refreshToken = RefreshToken.builder()
-                        .key(authentication.getName())
-                        .value(tokenDto.getRefreshToken())
-                        .build();
-                response.setContentType("application/json");
-                response.setCharacterEncoding("utf-8");
-
-
-                String result = objectMapper.writeValueAsString(tokenDto);
-                response.getWriter().write(result);*/
-
 
                 //JWT 토큰발급은 추가 정보 입력 폼 이후로
                 //authentication 을 인자로 넘길 수가 있나..

@@ -4,6 +4,7 @@ import AhChacha.Backend.domain.Member;
 import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.domain.RoleType;
 import AhChacha.Backend.oauth2.userinfo.GoogleOAuth2UserInfo;
+import AhChacha.Backend.oauth2.userinfo.KakaoOAuth2UserInfo;
 import AhChacha.Backend.oauth2.userinfo.OAuth2UserInfo;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,11 +24,14 @@ public class OAuth2AttributesRequest {
     }
 
     public static OAuth2AttributesRequest of(Platform platform, String userNameAttributeKey, Map<String, Object> attributes) {
-        /*if (platform == Platform.GOOGLE) {
-            return ofGoogle(userNameAttributeKey, attributes);
-        }*/
         System.out.println("platform = " + platform);
-        return ofGoogle(userNameAttributeKey, attributes);
+        if (platform == Platform.GOOGLE) {
+            return ofGoogle(userNameAttributeKey, attributes);
+        } else if (platform == Platform.KAKAO) {
+            return ofKakao(userNameAttributeKey, attributes);
+        }
+        else return null;
+        //return ofGoogle(userNameAttributeKey, attributes);
     }
 
 
@@ -36,6 +40,14 @@ public class OAuth2AttributesRequest {
         return OAuth2AttributesRequest.builder()
                 .nameAttributeKey(userNameAttributeKey)
                 .oAuth2UserInfo(new GoogleOAuth2UserInfo(attributes))
+                .build();
+    }
+
+    public static OAuth2AttributesRequest ofKakao(String userNameAttributeKey, Map<String, Object> attributes) {
+        System.out.println("attributes = " + attributes);
+        return OAuth2AttributesRequest.builder()
+                .nameAttributeKey(userNameAttributeKey)
+                .oAuth2UserInfo(new KakaoOAuth2UserInfo(attributes))
                 .build();
     }
 
