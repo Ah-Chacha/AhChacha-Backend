@@ -37,6 +37,7 @@ public class AuthController {
         log.info("accessToken = " + accessToken);
 //        memberService.requestUserInfo(accessToken);
         return ResponseEntity.ok(memberService.requestUserInfo(accessToken));       // 질문 : 이렇게 호출하면 requestUserInfo를 두번 호출하지 않아?
+        //이거 안써여 모바일용
     }
 
     @PostMapping("/login")
@@ -45,11 +46,10 @@ public class AuthController {
     }
 
 
-    @PostMapping("/sign-up/general")
+    /*@PostMapping("/sign-up/general")
     public ResponseEntity<SignUpResponse> signUpWithEmail(@RequestBody SignUpRequest signUpRequest) {
         return ResponseEntity.ok(memberService.signUpWithEmail(signUpRequest));
-    }
-
+    }*/
 
     /*@PostMapping("/signup/social")
     public ResponseEntity<TokenDto> socialSignUp(@RequestBody SignUpDto signUpDto) {
@@ -57,8 +57,9 @@ public class AuthController {
     }*/
 
 
+    //추가정보 입력
     @PostMapping("/sign-up/{provider}/{id}")
-    public ResponseEntity<SignUpResponse> signUp(@PathVariable("provider") Platform platform, @PathVariable("id") String id, @RequestBody SignUpRequest signUpRequest) throws Exception {
+    public ResponseEntity<TokenResponse> signUp(@PathVariable("provider") Platform platform, @PathVariable("id") String id, @RequestBody SignUpRequest signUpRequest) throws Exception {
         System.out.println("provider = " + platform);
         System.out.println("id = " + id);
         return ResponseEntity.ok(memberService.signUp(signUpRequest, platform, id));

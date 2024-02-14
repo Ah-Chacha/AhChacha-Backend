@@ -17,7 +17,7 @@ public class Member extends BaseTimeEntity {
     public static final String DEFAULT_PROFILE_ROOT = "./profileImage.png";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Convert(converter = PlatformConverter.class)
@@ -28,6 +28,8 @@ public class Member extends BaseTimeEntity {
     private String name;
 
     private String email;
+
+
 
     private String status = STATUS_ACTIVE;
 
@@ -64,10 +66,13 @@ public class Member extends BaseTimeEntity {
         this.profileImage = profileImage;
     }
 
-    public Member(Platform platform, String platformId, String profileImage){
+    public Member(Platform platform, String platformId, String profileImage, RoleType roleType, String name, String email){
         this.platform = platform;
         this.platformId = platformId;
         this.profileImage = profileImage;
+        this.roleType = roleType;
+        this.name = name;
+        this.email = email;
     }
 
     public Member of(String email) {
