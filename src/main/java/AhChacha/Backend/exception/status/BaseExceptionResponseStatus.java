@@ -46,7 +46,8 @@ public enum BaseExceptionResponseStatus implements ResponseStatus{
     DUPLICATE_NICKNAME(5001, HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다."),
     PASSWORD_MISMATCH(5002, HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
     EMAIL_NOT_FOUND(5003, HttpStatus.BAD_REQUEST, "존재하지 않는 이메일입니다."),
-    USER_NOT_FOUND(5004, HttpStatus.BAD_REQUEST, "존재하지 않는 회원입니다.");
+    USER_NOT_FOUND(5004, HttpStatus.BAD_REQUEST, "존재하지 않는 회원입니다."),
+    PLATFORM_NOT_FOUND(5005, HttpStatus.BAD_REQUEST, "존재하지 않는 플랫폼입니다.");
 
     private final int code;
     private final HttpStatus httpStatus;

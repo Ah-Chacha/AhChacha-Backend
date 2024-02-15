@@ -3,6 +3,7 @@ package AhChacha.Backend.service;
 import AhChacha.Backend.domain.Member;
 import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.exception.NotFoundException;
+import AhChacha.Backend.exception.status.BaseExceptionResponseStatus;
 import AhChacha.Backend.oauth2.CustomOAuth2User;
 import AhChacha.Backend.dto.oauth.request.OAuth2AttributesRequest;
 import AhChacha.Backend.repository.MemberRepository;
@@ -21,6 +22,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import static AhChacha.Backend.domain.Platform.*;
+import static AhChacha.Backend.exception.status.BaseExceptionResponseStatus.PLATFORM_NOT_FOUND;
 
 
 @Service
@@ -94,6 +96,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         } else if (naver.equals(registrationId)) {
             return NAVER;
         }
-        else return null;
+        else throw new NotFoundException(PLATFORM_NOT_FOUND);
     }
 }
