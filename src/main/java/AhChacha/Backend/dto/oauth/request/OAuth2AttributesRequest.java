@@ -5,6 +5,7 @@ import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.domain.RoleType;
 import AhChacha.Backend.oauth2.userinfo.GoogleOAuth2UserInfo;
 import AhChacha.Backend.oauth2.userinfo.KakaoOAuth2UserInfo;
+import AhChacha.Backend.oauth2.userinfo.NaverOAuth2UserInfo;
 import AhChacha.Backend.oauth2.userinfo.OAuth2UserInfo;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,6 +30,8 @@ public class OAuth2AttributesRequest {
             return ofGoogle(userNameAttributeKey, attributes);
         } else if (platform == Platform.KAKAO) {
             return ofKakao(userNameAttributeKey, attributes);
+        } else if (platform == Platform.NAVER) {
+            return ofNaver(userNameAttributeKey, attributes);
         }
         else return null;
         //return ofGoogle(userNameAttributeKey, attributes);
@@ -48,6 +51,15 @@ public class OAuth2AttributesRequest {
         return OAuth2AttributesRequest.builder()
                 .nameAttributeKey(userNameAttributeKey)
                 .oAuth2UserInfo(new KakaoOAuth2UserInfo(attributes))
+                .build();
+    }
+
+    public static OAuth2AttributesRequest ofNaver(String userNameAttributeKey, Map<String, Object> attributes) {
+        System.out.println("userNameAttributeKey = " + userNameAttributeKey);
+        System.out.println("attributes = " + attributes);
+        return OAuth2AttributesRequest.builder()
+                .nameAttributeKey(userNameAttributeKey)
+                .oAuth2UserInfo(new NaverOAuth2UserInfo(attributes))
                 .build();
     }
 

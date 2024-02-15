@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Service
@@ -42,17 +44,37 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         System.out.println("success");
         try {
             CustomOAuth2User customOAuth2User = (CustomOAuth2User) authentication.getPrincipal();
-
             System.out.println("authentication = " + authentication);
+            System.out.println("customOAuth2User = " + customOAuth2User);
+            System.out.println("customOAuth2User.getName() = " + customOAuth2User.getName());
+            System.out.println("request = " + request);
+            System.out.println("response = " + response);
+
             if(customOAuth2User.getRoleType() == RoleType.GUEST) {
-
-                //JWT 토큰발급은 추가 정보 입력 폼 이후로
-                //authentication 을 인자로 넘길 수가 있나..
-
 
 
                 Platform platform = customOAuth2User.getPlatform();
-                response.sendRedirect("/auth/sign-up/"+ platform +"/"+authentication.getName());
+
+                System.out.println("platform = " + platform);
+
+
+                if (platform == Platform.GOOGLE) {
+                    response.sendRedirect("/auth/sign-up/GOOGLE/"+authentication.getName());
+                } else if (platform == Platform.KAKAO) {
+                    response.sendRedirect("/auth/sign-up/KAKAO/"+authentication.getName());
+                } else if (platform == Platform.NAVER) {
+                    System.out.println("!!!!! = ");
+                    Map<String, String> map = new HashMap<>();
+                    String[] keyValuePairs = authentication.getName().substring(1, authentication.getName().length() - 1).split(", ");
+                    for (String pair : keyValuePairs) {
+                        String[] entry = pair.split("=");
+                        map.put(entry[0], entry[1]);
+                    }
+                    String id = map.get("id");
+                    System.out.println("id = " + id);
+                    response.sendRedirect("/auth/sign-up/NAVER/"+id);
+                }
+                //response.sendRedirect("/auth/sign-up/"+ platform +"/"+authentication.getName());
                 System.out.println("/auth/sign-up/"+ platform +"/"+authentication.getName());
                 //회원가입 화면으로 redirect
                 //refreshTokenRepository.save(refreshToken);

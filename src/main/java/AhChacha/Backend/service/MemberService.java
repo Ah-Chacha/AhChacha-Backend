@@ -117,6 +117,7 @@ public class MemberService {
         refreshTokenRepository.save(refreshToken);*/
 
 
+
         //이메일 중첩 확인 등등 해야댐
 
         Member member = memberRepository.findByPlatformAndPlatformId(platform, id)
@@ -129,9 +130,9 @@ public class MemberService {
             platform_to_string = "GOOGLE";
         } else if (platform.toString().equals("KAKAO")) {
             platform_to_string = "KAKAO";
+        } else if (platform.toString().equals("NAVER")) {
+            platform_to_string = "NAVER";
         }
-
-
 
 
         memberRepository.updateMember(signUpRequest.getRoleType(), platform_to_string, id);

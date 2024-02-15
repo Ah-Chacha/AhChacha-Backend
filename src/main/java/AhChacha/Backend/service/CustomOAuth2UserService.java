@@ -2,6 +2,7 @@ package AhChacha.Backend.service;
 
 import AhChacha.Backend.domain.Member;
 import AhChacha.Backend.domain.Platform;
+import AhChacha.Backend.exception.NotFoundException;
 import AhChacha.Backend.oauth2.CustomOAuth2User;
 import AhChacha.Backend.dto.oauth.request.OAuth2AttributesRequest;
 import AhChacha.Backend.repository.MemberRepository;
@@ -19,8 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.Map;
 
-import static AhChacha.Backend.domain.Platform.GOOGLE;
-import static AhChacha.Backend.domain.Platform.KAKAO;
+import static AhChacha.Backend.domain.Platform.*;
 
 
 @Service
@@ -86,11 +86,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     private Platform getPlatform(String registrationId) {
         String google = "google";
         String kakao = "kakao";
+        String naver = "naver";
         if(google.equals(registrationId)) {
             return GOOGLE;
         } else if (kakao.equals(registrationId)) {
             return KAKAO;
+        } else if (naver.equals(registrationId)) {
+            return NAVER;
         }
-        else return Platform.NAVER;
+        else return null;
     }
 }
