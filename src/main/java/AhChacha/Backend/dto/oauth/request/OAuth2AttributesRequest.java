@@ -3,6 +3,8 @@ package AhChacha.Backend.dto.oauth.request;
 import AhChacha.Backend.domain.Member;
 import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.domain.RoleType;
+import AhChacha.Backend.exception.NotFoundException;
+import AhChacha.Backend.exception.status.BaseExceptionResponseStatus;
 import AhChacha.Backend.oauth2.userinfo.GoogleOAuth2UserInfo;
 import AhChacha.Backend.oauth2.userinfo.KakaoOAuth2UserInfo;
 import AhChacha.Backend.oauth2.userinfo.NaverOAuth2UserInfo;
@@ -11,6 +13,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.Map;
+
+import static AhChacha.Backend.exception.status.BaseExceptionResponseStatus.PLATFORM_NOT_FOUND;
 
 @Getter
 public class OAuth2AttributesRequest {
@@ -33,7 +37,7 @@ public class OAuth2AttributesRequest {
         } else if (platform == Platform.NAVER) {
             return ofNaver(userNameAttributeKey, attributes);
         }
-        else return null;
+        else throw new NotFoundException(PLATFORM_NOT_FOUND);
         //return ofGoogle(userNameAttributeKey, attributes);
     }
 

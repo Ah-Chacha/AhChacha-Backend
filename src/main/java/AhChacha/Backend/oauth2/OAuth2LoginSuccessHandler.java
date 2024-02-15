@@ -4,6 +4,8 @@ import AhChacha.Backend.dto.oauth.response.TokenResponse;
 import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.domain.RefreshToken;
 import AhChacha.Backend.domain.RoleType;
+import AhChacha.Backend.exception.NotFoundException;
+import AhChacha.Backend.exception.status.BaseExceptionResponseStatus;
 import AhChacha.Backend.jwt.TokenProvider;
 import AhChacha.Backend.repository.RefreshTokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import static AhChacha.Backend.exception.status.BaseExceptionResponseStatus.PLATFORM_NOT_FOUND;
 
 
 @Service
@@ -50,10 +54,11 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             System.out.println("request = " + request);
             System.out.println("response = " + response);
 
+            Platform platform = customOAuth2User.getPlatform();
+
             if(customOAuth2User.getRoleType() == RoleType.GUEST) {
 
 
-                Platform platform = customOAuth2User.getPlatform();
 
                 System.out.println("platform = " + platform);
 
@@ -73,7 +78,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                     String id = map.get("id");
                     System.out.println("id = " + id);
                     response.sendRedirect("/auth/sign-up/NAVER/"+id);
-                }
+                } else throw new NotFoundException(PLATFORM_NOT_FOUND);
                 //response.sendRedirect("/auth/sign-up/"+ platform +"/"+authentication.getName());
                 System.out.println("/auth/sign-up/"+ platform +"/"+authentication.getName());
                 //회원가입 화면으로 redirect
@@ -81,13 +86,33 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 //System.out.println("result = " + result);
 
             } else {
-                TokenResponse tokenResponse = loginSuccess(response, customOAuth2User, authentication);
-                System.out.println("tokenDto = " + tokenResponse);
-                response.setContentType("application/json");
-                response.setCharacterEncoding("utf-8");
-
-                String result = objectMapper.writeValueAsString(tokenResponse);
-                response.getWriter().write(result);
+                if (platform == Platform.GOOGLE) {
+                    TokenResponse tokenResponse = loginSuccess(authentication);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("utf-8");
+                    String result = objectMapper.writeValueAsString(tokenResponse);
+                    response.getWriter().write(result);
+                } else if (platform == Platform.KAKAO) {
+                    TokenResponse tokenResponse = loginSuccess(authentication);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("utf-8");
+                    String result = objectMapper.writeValueAsString(tokenResponse);
+                    response.getWriter().write(result);
+                } else if (platform == Platform.NAVER) {
+                    Map<String, String> map = new HashMap<>();
+                    String[] keyValuePairs = authentication.getName().substring(1, authentication.getName().length() - 1).split(", ");
+                    for (String pair : keyValuePairs) {
+                        String[] entry = pair.split("=");
+                        map.put(entry[0], entry[1]);
+                    }
+                    String id = map.get("id");
+                    System.out.println("id = " + id);
+                    TokenResponse tokenResponse = loginSuccessForNaver(authentication, id);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("utf-8");
+                    String result = objectMapper.writeValueAsString(tokenResponse);
+                    response.getWriter().write(result);
+                } else throw new NotFoundException(PLATFORM_NOT_FOUND);
             }
         } catch (Exception e) {
             throw e;
@@ -96,11 +121,23 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     //dto를 리턴하고 싶은데... redirect를 여기서 하려면.. response 함수를 써야하는듯..
     @Transactional
-    public TokenResponse loginSuccess(HttpServletResponse response, CustomOAuth2User customOAuth2User, Authentication authentication) throws IOException {
+    public TokenResponse loginSuccess(Authentication authentication) {
         //refresh 토큰 확인?? or 로그인 시 마다 토큰 새로 발급?
         TokenResponse tokenResponse = tokenProvider.generateTokenDto(authentication);
         RefreshToken refreshToken = RefreshToken.builder()
                 .key(authentication.getName())   //refreshToken = platformId
+                .value(tokenResponse.getRefreshToken())
+                .build();
+        refreshTokenRepository.save(refreshToken);
+        return tokenResponse;
+    }
+
+    @Transactional
+    public TokenResponse loginSuccessForNaver(Authentication authentication, String id) {
+        //refresh 토큰 확인?? or 로그인 시 마다 토큰 새로 발급?
+        TokenResponse tokenResponse = tokenProvider.generateTokenDto(authentication);
+        RefreshToken refreshToken = RefreshToken.builder()
+                .key(id)   //refreshToken = platformId
                 .value(tokenResponse.getRefreshToken())
                 .build();
         refreshTokenRepository.save(refreshToken);
