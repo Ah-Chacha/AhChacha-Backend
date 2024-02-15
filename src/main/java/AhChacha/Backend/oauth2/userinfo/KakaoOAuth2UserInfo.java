@@ -8,6 +8,8 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo{
         super(attributes);
     }
 
+    Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
+
     @Override
     public String getId() {
         return String.valueOf(attributes.get("id"));
@@ -15,16 +17,16 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo{
 
     @Override
     public String getProfileImageUrl() {
-        return String.valueOf(attributes.get("profile_image"));
+        return String.valueOf(properties.get("profile_image"));
     }
 
     @Override
     public String getName() {
-        return String.valueOf(attributes.get("nickname"));
+        return String.valueOf(properties.get("nickname"));
     }
 
     @Override
     public String getEmail() {
-        return String.valueOf(attributes.get("account_email"));
+        return String.valueOf(attributes.get("account_email")); //카카오는 비즈앱 전환해야 이메일이 받아진다고 합니다.
     }
 }
