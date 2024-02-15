@@ -35,5 +35,13 @@ public class CustomOAuth2User extends DefaultOAuth2User {
         this.roleType = roleType;
     }
 
-
+    public Platform getPlatform() {
+        System.out.println("getAttribute(\"resultcode\") = " + getAttribute("resultcode"));
+        System.out.println("getAttribute(\"id\") = " + getAttribute("id"));
+        if (getAttribute("resultcode")!= null) {
+            return Platform.NAVER;
+        } else if (getAttribute("id") != null) {
+            return Platform.KAKAO;
+        } else return Platform.GOOGLE;
+    }
 }
