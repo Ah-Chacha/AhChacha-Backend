@@ -58,16 +58,16 @@ public class AuthController {
 
 
     //추가정보 입력
-    @PostMapping("/sign-up/{provider}/{id}")
-    public ResponseEntity<TokenResponse> signUp(@PathVariable("provider") Platform platform, @PathVariable("id") String id, @RequestBody SignUpRequest signUpRequest) throws Exception {
+    @PostMapping("/sign-up/{platform}/{id}")
+    public ResponseEntity<TokenResponse> signUp(@PathVariable("platform") Platform platform, @PathVariable("id") String id, @RequestBody SignUpRequest signUpRequest) throws Exception {
         System.out.println("provider = " + platform);
         System.out.println("id = " + id);
         return ResponseEntity.ok(memberService.signUp(signUpRequest, platform, id));
     }
 
 
-    @GetMapping("/sign-up/{provider}/{id}")
-    public String signUp1(@PathVariable("provider") Platform platform, @PathVariable("id") String id) throws Exception {
+    @GetMapping("/sign-up/{platform}/{id}")
+    public String signUp(@PathVariable("platform") Platform platform, @PathVariable("id") String id) throws Exception {
         //memberService.signUp(signUpDto, provider, id);
         System.out.println("provider = " + platform);
         System.out.println("id = " + id);

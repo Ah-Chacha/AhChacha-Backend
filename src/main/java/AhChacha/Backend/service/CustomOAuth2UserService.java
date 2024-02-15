@@ -2,6 +2,8 @@ package AhChacha.Backend.service;
 
 import AhChacha.Backend.domain.Member;
 import AhChacha.Backend.domain.Platform;
+import AhChacha.Backend.exception.NotFoundException;
+import AhChacha.Backend.exception.status.BaseExceptionResponseStatus;
 import AhChacha.Backend.oauth2.CustomOAuth2User;
 import AhChacha.Backend.dto.oauth.request.OAuth2AttributesRequest;
 import AhChacha.Backend.repository.MemberRepository;
@@ -19,7 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.Map;
 
-
+import static AhChacha.Backend.domain.Platform.*;
+import static AhChacha.Backend.exception.status.BaseExceptionResponseStatus.PLATFORM_NOT_FOUND;
 
 
 @Service
@@ -40,7 +43,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         System.out.println("In loadUser!!!!!!!!!!!!!!!!!");
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        Platform platform = getProvider(registrationId);
+        System.out.println("registrationId = " + registrationId);
+        Platform platform = getPlatform(registrationId);
         System.out.println("platform = " + platform);
         String userNameAttributeName = userRequest.getClientRegistration()
                 .getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
@@ -51,6 +55,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Member createdMember = getMember(extractAttributes, platform);
 
         System.out.println("createdMember.getRoleType() = " + createdMember.getRoleType());
+        System.out.println("createdMember.getPlatformId() = " + createdMember.getPlatformId());
 
         return new CustomOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(createdMember.getRoleType().getKey())),
@@ -74,15 +79,23 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     public Member saveMember(OAuth2AttributesRequest extractAttributes, Platform platform) {
         Member createdMember = extractAttributes.toMember(platform, extractAttributes.getOAuth2UserInfo());
         System.out.println("createdMember = " + createdMember);
+        System.out.println("createdMember = " + createdMember.getPlatformId());
         System.out.println("createdMember.getRoleType() = " + createdMember.getRoleType());
         System.out.println("createdMember.getPlatform() = " + createdMember.getPlatform());
         return memberRepository.save(createdMember);
     }
 
-    private Platform getProvider(String registrationId) {
-        /*if(KAKAO.equals(registrationId)) {
-            return Platform.KAKAO;
-        }*/
-        return Platform.GOOGLE;
+    private Platform getPlatform(String registrationId) {
+        String google = "google";
+        String kakao = "kakao";
+        String naver = "naver";
+        if(google.equals(registrationId)) {
+            return GOOGLE;
+        } else if (kakao.equals(registrationId)) {
+            return KAKAO;
+        } else if (naver.equals(registrationId)) {
+            return NAVER;
+        }
+        else throw new NotFoundException(PLATFORM_NOT_FOUND);
     }
 }

@@ -2,12 +2,16 @@ package AhChacha.Backend.oauth2;
 
 import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.domain.RoleType;
+import AhChacha.Backend.exception.NotFoundException;
+import AhChacha.Backend.exception.status.BaseExceptionResponseStatus;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 
 import java.util.Collection;
 import java.util.Map;
+
+import static AhChacha.Backend.exception.status.BaseExceptionResponseStatus.PLATFORM_NOT_FOUND;
 
 
 @Getter
@@ -35,5 +39,15 @@ public class CustomOAuth2User extends DefaultOAuth2User {
         this.roleType = roleType;
     }
 
-
+    public Platform getPlatform() {
+        System.out.println("getAttribute(\"resultcode\") = " + getAttribute("resultcode"));
+        System.out.println("getAttribute(\"id\") = " + getAttribute("id"));
+        if (getAttribute("resultcode")!= null) {
+            return Platform.NAVER;
+        } else if (getAttribute("id") != null) {
+            return Platform.KAKAO;
+        } else if (getAttribute("sub") != null) {
+            return Platform.GOOGLE;
+        } else throw new NotFoundException(PLATFORM_NOT_FOUND);
+    }
 }

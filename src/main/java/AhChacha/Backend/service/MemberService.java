@@ -30,6 +30,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
+import static AhChacha.Backend.exception.status.BaseExceptionResponseStatus.PLATFORM_NOT_FOUND;
 import static AhChacha.Backend.exception.status.BaseExceptionResponseStatus.USER_NOT_FOUND;
 
 @Service
@@ -117,6 +118,7 @@ public class MemberService {
         refreshTokenRepository.save(refreshToken);*/
 
 
+
         //이메일 중첩 확인 등등 해야댐
 
         Member member = memberRepository.findByPlatformAndPlatformId(platform, id)
@@ -129,9 +131,9 @@ public class MemberService {
             platform_to_string = "GOOGLE";
         } else if (platform.toString().equals("KAKAO")) {
             platform_to_string = "KAKAO";
-        }
-
-
+        } else if (platform.toString().equals("NAVER")) {
+            platform_to_string = "NAVER";
+        } else throw new NotFoundException(PLATFORM_NOT_FOUND);
 
 
         memberRepository.updateMember(signUpRequest.getRoleType(), platform_to_string, id);
