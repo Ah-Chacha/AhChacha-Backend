@@ -4,6 +4,7 @@ import AhChacha.Backend.dto.exercise.request.ExerciseRequest;
 import AhChacha.Backend.dto.exercise.response.ExerciseIdResponse;
 import AhChacha.Backend.dto.exercise.response.ExercisesResponse;
 import AhChacha.Backend.service.ExerciseService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class ExerciseController {
 
     @PostMapping("/{memberId}")
     public ResponseEntity<ExerciseIdResponse> save(@PathVariable("memberId") Long id,
-                                                   @RequestBody ExerciseRequest request) {
+                                                   @RequestBody @Valid ExerciseRequest request) {
         ExerciseIdResponse response = exerciseService.save(id, request);
         return ResponseEntity.ok(response);
     }
@@ -31,7 +32,7 @@ public class ExerciseController {
 
     @PutMapping("/{exerciseId}")
     public ResponseEntity<ExerciseIdResponse> update(@PathVariable("exerciseId") Long id,
-                                                     @RequestBody ExerciseRequest request) {
+                                                     @RequestBody @Valid ExerciseRequest request) {
         ExerciseIdResponse response = exerciseService.update(id, request);
         return ResponseEntity.ok(response);
     }

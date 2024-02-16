@@ -18,14 +18,14 @@ public class Habit extends BaseTimeEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Comment("예방 음식 섭취 개수")
+    @Comment("예방 음식 섭취 개수 : 0개 이상 20개 이하")
     @Column(nullable = false)
     private int foodNum;
 
     @Column(nullable = false)
     private int alcoholQuantity;
 
-    @Comment("하루 독서 시간")
+    @Comment("하루 독서 시간 : 분 단위로 입력")
     @Column(nullable = false)
     private int readingTime;
 

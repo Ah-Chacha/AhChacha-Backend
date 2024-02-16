@@ -2,15 +2,15 @@ package AhChacha.Backend.controller;
 
 
 import AhChacha.Backend.domain.Platform;
+import AhChacha.Backend.dto.oauth.request.LoginRequest;
+import AhChacha.Backend.dto.oauth.request.OAuth2TokenRequest;
 import AhChacha.Backend.dto.oauth.request.SignUpRequest;
+import AhChacha.Backend.dto.oauth.request.TokenRequest;
+import AhChacha.Backend.dto.oauth.response.TokenResponse;
 import AhChacha.Backend.repository.MemberRepository;
 import AhChacha.Backend.service.CustomOAuth2UserService;
 import AhChacha.Backend.service.MemberService;
-import AhChacha.Backend.dto.oauth.request.LoginRequest;
-import AhChacha.Backend.dto.oauth.request.OAuth2TokenRequest;
-import AhChacha.Backend.dto.oauth.request.TokenRequest;
-import AhChacha.Backend.dto.oauth.response.SignUpResponse;
-import AhChacha.Backend.dto.oauth.response.TokenResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +27,6 @@ public class AuthController {
     private final MemberRepository memberRepository;
 
 
-
-
-
     //FE에서 AccessToken넘김
     @PostMapping("/token")
     public ResponseEntity<TokenResponse> getAccessToken(@RequestBody OAuth2TokenRequest oAuth2TokenRequest) {
@@ -41,7 +38,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
         return ResponseEntity.ok(memberService.login(loginRequest));
     }
 
@@ -59,7 +56,7 @@ public class AuthController {
 
     //추가정보 입력
     @PostMapping("/sign-up/{platform}/{id}")
-    public ResponseEntity<TokenResponse> signUp(@PathVariable("platform") Platform platform, @PathVariable("id") String id, @RequestBody SignUpRequest signUpRequest) throws Exception {
+    public ResponseEntity<TokenResponse> signUp(@PathVariable("platform") Platform platform, @PathVariable("id") String id, @RequestBody @Valid SignUpRequest signUpRequest) throws Exception {
         System.out.println("provider = " + platform);
         System.out.println("id = " + id);
         return ResponseEntity.ok(memberService.signUp(signUpRequest, platform, id));

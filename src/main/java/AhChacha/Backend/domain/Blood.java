@@ -18,15 +18,15 @@ public class Blood extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Comment("수축기 혈압")
+    @Comment("수축기 혈압 : 40mmHg 이상 200mmHg 이하")
     @Column(name = "systolic_pressure", nullable = false)
     private int systolicPressure;
 
-    @Comment("이완기 혈압")
+    @Comment("이완기 혈압 : 20mmHg 이상 150mmHg 이하")
     @Column(name = "diastolic_pressure", nullable = false)
     private int diastolicPressure;
 
-    @Comment("심박수")
+    @Comment("심박수 : 20bpm 이상 250 bpm 이하")
     @Column(name = "heart_rate", nullable = false)
     private int heartRate;
 

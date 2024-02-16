@@ -28,6 +28,8 @@ public enum BaseExceptionResponseStatus implements ResponseStatus{
     BLOOD_NOT_FOUND(3004, HttpStatus.NOT_FOUND, "존재하지 않는 심혈관 기록입니다."),
     EXERCISE_NOT_FOUND(3005, HttpStatus.NOT_FOUND, "존재하지 않는 운동 기록입니다."),
     HABIT_NOT_FOUND(3006, HttpStatus.NOT_FOUND, "존재하지 않는 습관 기록입니다."),
+    DAY_EXCEPTION(3007, HttpStatus.BAD_REQUEST, "연/월이 유효한지 확인해주세요."),
+    VALID_EXCEPTION(3008, HttpStatus.BAD_REQUEST, "데이터 유효성 검증에 실패하였습니다."),
 
     /*
      * code 4000번대 : Authorization 오류

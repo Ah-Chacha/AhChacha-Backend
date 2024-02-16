@@ -5,6 +5,7 @@ import AhChacha.Backend.dto.blood.response.BloodIdResponse;
 import AhChacha.Backend.dto.blood.response.BloodsResponse;
 import AhChacha.Backend.service.BloodService;
 import AhChacha.Backend.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class BloodController {
 
     @PostMapping("/{memberId}")
     public ResponseEntity<BloodIdResponse> save(@PathVariable("memberId") Long id,
-                                                @RequestBody BloodRequest request){
+                                                @RequestBody @Valid BloodRequest request){
         BloodIdResponse response = bloodService.save(id, request);
         return ResponseEntity.ok(response);
     }
@@ -32,7 +33,7 @@ public class BloodController {
 
     @PutMapping("/{bloodId}")
     public ResponseEntity<BloodIdResponse> update(@PathVariable("bloodId") Long id,
-                                                  @RequestBody BloodRequest request){
+                                                  @RequestBody @Valid BloodRequest request){
         BloodIdResponse response = bloodService.update(request, id);
         return ResponseEntity.ok(response);
     }
