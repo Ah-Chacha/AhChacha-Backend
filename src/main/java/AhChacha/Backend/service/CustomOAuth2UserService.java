@@ -86,16 +86,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private Platform getPlatform(String registrationId) {
-        String google = "google";
-        String kakao = "kakao";
-        String naver = "naver";
-        if(google.equals(registrationId)) {
-            return GOOGLE;
-        } else if (kakao.equals(registrationId)) {
-            return KAKAO;
-        } else if (naver.equals(registrationId)) {
-            return NAVER;
+        try {
+            return Platform.valueOf(registrationId.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new NotFoundException(PLATFORM_NOT_FOUND);
         }
-        else throw new NotFoundException(PLATFORM_NOT_FOUND);
     }
 }

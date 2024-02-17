@@ -108,35 +108,13 @@ public class MemberService {
     @Transactional
     public TokenResponse signUp(SignUpRequest signUpRequest, Platform platform, String id) throws Exception {
 
-        /*
-        //JWT 발급
-        TokenDto tokenDto = tokenProvider.generateTokenDtoByAuthName(id);
-        RefreshToken refreshToken = RefreshToken.builder()
-                .key(id)
-                .value(tokenDto.getRefreshToken())
-                .build();
-        refreshTokenRepository.save(refreshToken);*/
-
-
-
-        //이메일 중첩 확인 등등 해야댐
 
         Member member = memberRepository.findByPlatformAndPlatformId(platform, id)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         System.out.println("member = " + member);
 
-        String platform_to_string = "";
 
-        if (platform.toString().equals("GOOGLE")) {
-            platform_to_string = "GOOGLE";
-        } else if (platform.toString().equals("KAKAO")) {
-            platform_to_string = "KAKAO";
-        } else if (platform.toString().equals("NAVER")) {
-            platform_to_string = "NAVER";
-        } else throw new NotFoundException(PLATFORM_NOT_FOUND);
-
-
-        memberRepository.updateMember(signUpRequest.getRoleType(), platform_to_string, id);
+        memberRepository.updateMember(signUpRequest.getRoleType(), platform.getKey(), id);
         //System.out.println("signUpDto = " + signUpDto.getPhoneNumber());
 
         //JWT 발급

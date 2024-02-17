@@ -31,41 +31,24 @@ public class OAuth2AttributesRequest {
     public static OAuth2AttributesRequest of(Platform platform, String userNameAttributeKey, Map<String, Object> attributes) {
         System.out.println("platform = " + platform);
         if (platform == Platform.GOOGLE) {
-            return ofGoogle(userNameAttributeKey, attributes);
+            return OAuth2AttributesRequest.builder()
+                    .nameAttributeKey(userNameAttributeKey)
+                    .oAuth2UserInfo(new GoogleOAuth2UserInfo(attributes))
+                    .build();
         } else if (platform == Platform.KAKAO) {
-            return ofKakao(userNameAttributeKey, attributes);
+            return OAuth2AttributesRequest.builder()
+                    .nameAttributeKey(userNameAttributeKey)
+                    .oAuth2UserInfo(new KakaoOAuth2UserInfo(attributes))
+                    .build();
         } else if (platform == Platform.NAVER) {
-            return ofNaver(userNameAttributeKey, attributes);
+            return OAuth2AttributesRequest.builder()
+                    .nameAttributeKey(userNameAttributeKey)
+                    .oAuth2UserInfo(new NaverOAuth2UserInfo(attributes))
+                    .build();
         }
         else throw new NotFoundException(PLATFORM_NOT_FOUND);
-        //return ofGoogle(userNameAttributeKey, attributes);
     }
 
-
-    public static OAuth2AttributesRequest ofGoogle(String userNameAttributeKey, Map<String, Object> attributes) {
-        System.out.println("userNameAttributeKey = " + userNameAttributeKey);
-        return OAuth2AttributesRequest.builder()
-                .nameAttributeKey(userNameAttributeKey)
-                .oAuth2UserInfo(new GoogleOAuth2UserInfo(attributes))
-                .build();
-    }
-
-    public static OAuth2AttributesRequest ofKakao(String userNameAttributeKey, Map<String, Object> attributes) {
-        System.out.println("attributes = " + attributes);
-        return OAuth2AttributesRequest.builder()
-                .nameAttributeKey(userNameAttributeKey)
-                .oAuth2UserInfo(new KakaoOAuth2UserInfo(attributes))
-                .build();
-    }
-
-    public static OAuth2AttributesRequest ofNaver(String userNameAttributeKey, Map<String, Object> attributes) {
-        System.out.println("userNameAttributeKey = " + userNameAttributeKey);
-        System.out.println("attributes = " + attributes);
-        return OAuth2AttributesRequest.builder()
-                .nameAttributeKey(userNameAttributeKey)
-                .oAuth2UserInfo(new NaverOAuth2UserInfo(attributes))
-                .build();
-    }
 
     public Member toMember(Platform platform, OAuth2UserInfo oAuth2UserInfo) {
         System.out.println("platform = " + platform);

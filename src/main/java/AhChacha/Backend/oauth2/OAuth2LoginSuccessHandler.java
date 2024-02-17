@@ -63,10 +63,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 System.out.println("platform = " + platform);
 
 
-                if (platform == Platform.GOOGLE) {
-                    response.sendRedirect("/auth/sign-up/GOOGLE/"+authentication.getName());
-                } else if (platform == Platform.KAKAO) {
-                    response.sendRedirect("/auth/sign-up/KAKAO/"+authentication.getName());
+                if (platform == Platform.GOOGLE || platform == Platform.KAKAO) {
+                    response.sendRedirect("/auth/sign-up/"+platform.getKey()+"/"+authentication.getName());
                 } else if (platform == Platform.NAVER) {
                     System.out.println("!!!!! = ");
                     Map<String, String> map = new HashMap<>();
@@ -86,13 +84,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 //System.out.println("result = " + result);
 
             } else {
-                if (platform == Platform.GOOGLE) {
-                    TokenResponse tokenResponse = loginSuccess(authentication);
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("utf-8");
-                    String result = objectMapper.writeValueAsString(tokenResponse);
-                    response.getWriter().write(result);
-                } else if (platform == Platform.KAKAO) {
+                if (platform == Platform.GOOGLE  || platform == Platform.KAKAO) {
                     TokenResponse tokenResponse = loginSuccess(authentication);
                     response.setContentType("application/json");
                     response.setCharacterEncoding("utf-8");
@@ -122,7 +114,6 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     //dto를 리턴하고 싶은데... redirect를 여기서 하려면.. response 함수를 써야하는듯..
     @Transactional
     public TokenResponse loginSuccess(Authentication authentication) {
-        //refresh 토큰 확인?? or 로그인 시 마다 토큰 새로 발급?
         TokenResponse tokenResponse = tokenProvider.generateTokenDto(authentication);
         RefreshToken refreshToken = RefreshToken.builder()
                 .key(authentication.getName())   //refreshToken = platformId
@@ -134,7 +125,6 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Transactional
     public TokenResponse loginSuccessForNaver(Authentication authentication, String id) {
-        //refresh 토큰 확인?? or 로그인 시 마다 토큰 새로 발급?
         TokenResponse tokenResponse = tokenProvider.generateTokenDto(authentication);
         RefreshToken refreshToken = RefreshToken.builder()
                 .key(id)   //refreshToken = platformId
