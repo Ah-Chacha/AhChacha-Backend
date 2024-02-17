@@ -18,7 +18,7 @@ public class Exercise extends BaseTimeEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Comment("하루 운동 시간")
+    @Comment("하루 운동 시간 : 분 단위로 입력")
     @Column(name = "quantity", nullable = false)
     private int quantity;
 

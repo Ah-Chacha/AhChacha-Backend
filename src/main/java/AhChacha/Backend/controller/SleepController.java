@@ -5,6 +5,7 @@ import AhChacha.Backend.dto.sleep.request.SleepRequest;
 import AhChacha.Backend.dto.sleep.response.SleepIdResponse;
 import AhChacha.Backend.dto.sleep.response.SleepsResponse;
 import AhChacha.Backend.service.SleepService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Comment;
@@ -20,7 +21,7 @@ public class SleepController {
     private final SleepService sleepService;
 
     @PostMapping("/{memberId}")
-    public ResponseEntity<SleepIdResponse> save(@RequestBody SleepRequest sleepRequest,
+    public ResponseEntity<SleepIdResponse> save(@RequestBody @Valid SleepRequest sleepRequest,
                                                 @PathVariable(value = "memberId") Long id) {
         log.info("[SleepController.save]");
         SleepIdResponse response = sleepService.save(sleepRequest, id);
@@ -37,7 +38,7 @@ public class SleepController {
 
     @PutMapping("/{sleepId}")
     public ResponseEntity<SleepIdResponse> update(@PathVariable("sleepId") Long id,
-                                                  @RequestBody SleepRequest sleepRequest) {
+                                                  @RequestBody @Valid SleepRequest sleepRequest) {
         log.info("[SleepController.update]");
         SleepIdResponse response = sleepService.update(id, sleepRequest);
         return ResponseEntity.ok(response);

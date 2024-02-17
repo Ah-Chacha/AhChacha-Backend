@@ -4,6 +4,7 @@ import AhChacha.Backend.dto.habit.request.HabitRequest;
 import AhChacha.Backend.dto.habit.response.HabitIdResponse;
 import AhChacha.Backend.dto.habit.response.HabitsResponse;
 import AhChacha.Backend.service.HabitService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class HabitController {
 
     @PostMapping("/{memberId}")
     public ResponseEntity<HabitIdResponse> save(@PathVariable("memberId") Long id,
-                                @RequestBody HabitRequest request){
+                                @RequestBody @Valid HabitRequest request){
         HabitIdResponse response = habitService.save(id, request);
         return ResponseEntity.ok(response);
     }
@@ -32,7 +33,7 @@ public class HabitController {
 
     @PutMapping("/{habitId}")
     public ResponseEntity<HabitIdResponse> update(@PathVariable("habitId") Long id,
-                                                  @RequestBody HabitRequest request){
+                                                  @RequestBody @Valid HabitRequest request){
         HabitIdResponse response = habitService.update(id, request);
         return ResponseEntity.ok(response);
     }
