@@ -1,5 +1,6 @@
 package AhChacha.Backend.oauth2;
 
+import AhChacha.Backend.domain.Member;
 import AhChacha.Backend.dto.oauth.response.TokenResponse;
 import AhChacha.Backend.domain.Platform;
 import AhChacha.Backend.domain.RefreshToken;
@@ -7,6 +8,7 @@ import AhChacha.Backend.domain.RoleType;
 import AhChacha.Backend.exception.NotFoundException;
 import AhChacha.Backend.exception.status.BaseExceptionResponseStatus;
 import AhChacha.Backend.jwt.TokenProvider;
+import AhChacha.Backend.repository.MemberRepository;
 import AhChacha.Backend.repository.RefreshTokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
@@ -25,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static AhChacha.Backend.exception.status.BaseExceptionResponseStatus.PLATFORM_NOT_FOUND;
+import static AhChacha.Backend.exception.status.BaseExceptionResponseStatus.USER_NOT_FOUND;
 
 
 @Service
@@ -40,6 +43,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     @Override
@@ -85,7 +89,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
             } else {
                 if (platform == Platform.GOOGLE  || platform == Platform.KAKAO) {
-                    TokenResponse tokenResponse = loginSuccess(authentication);
+                    TokenResponse tokenResponse = loginSuccess(authentication, platform);
                     response.setContentType("application/json");
                     response.setCharacterEncoding("utf-8");
                     String result = objectMapper.writeValueAsString(tokenResponse);
@@ -113,8 +117,10 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     //dto를 리턴하고 싶은데... redirect를 여기서 하려면.. response 함수를 써야하는듯..
     @Transactional
-    public TokenResponse loginSuccess(Authentication authentication) {
-        TokenResponse tokenResponse = tokenProvider.generateTokenDto(authentication);
+    public TokenResponse loginSuccess(Authentication authentication, Platform platform) {
+        Member member = memberRepository.findByPlatformAndPlatformId(platform, authentication.getName())
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        TokenResponse tokenResponse = tokenProvider.generateTokenDto(authentication, platform, member.getId(), authentication.getName());
         RefreshToken refreshToken = RefreshToken.builder()
                 .key(authentication.getName())   //refreshToken = platformId
                 .value(tokenResponse.getRefreshToken())
@@ -125,7 +131,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Transactional
     public TokenResponse loginSuccessForNaver(Authentication authentication, String id) {
-        TokenResponse tokenResponse = tokenProvider.generateTokenDto(authentication);
+        Member member = memberRepository.findByPlatformAndPlatformId(Platform.NAVER, id)
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        TokenResponse tokenResponse = tokenProvider.generateTokenDto(authentication, Platform.NAVER, member.getId(), id);
         RefreshToken refreshToken = RefreshToken.builder()
                 .key(id)   //refreshToken = platformId
                 .value(tokenResponse.getRefreshToken())

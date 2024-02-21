@@ -75,7 +75,7 @@ public class TokenProvider {
     }
 
 
-    public TokenResponse generateTokenDto(Authentication authentication) {
+    public TokenResponse generateTokenDto(Authentication authentication, Platform platform, Long memberId, String name) {
 
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -107,6 +107,9 @@ public class TokenProvider {
                 .accessToken(accessToken)
                 .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
                 .refreshToken(refreshToken)
+                .platform(platform)
+                .id(authentication.getName())
+                .member_id(memberId)
                 .build();
     }
 

@@ -29,7 +29,6 @@ public class OAuth2AttributesRequest {
     }
 
     public static OAuth2AttributesRequest of(Platform platform, String userNameAttributeKey, Map<String, Object> attributes) {
-        System.out.println("platform = " + platform);
         if (platform == Platform.GOOGLE) {
             return OAuth2AttributesRequest.builder()
                     .nameAttributeKey(userNameAttributeKey)
