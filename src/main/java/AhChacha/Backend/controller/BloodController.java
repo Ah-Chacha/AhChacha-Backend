@@ -4,7 +4,6 @@ import AhChacha.Backend.dto.blood.request.BloodRequest;
 import AhChacha.Backend.dto.blood.response.BloodIdResponse;
 import AhChacha.Backend.dto.blood.response.BloodsResponse;
 import AhChacha.Backend.service.BloodService;
-import AhChacha.Backend.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

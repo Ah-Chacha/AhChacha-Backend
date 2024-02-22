@@ -29,7 +29,7 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI(){
         return new OpenAPI()
-                .components(new Components().addSecuritySchemes("JTW", bearerAuth()));
+                .components(new Components().addSecuritySchemes("JWT", bearerAuth()));
     }
 
     private SecurityScheme bearerAuth() {

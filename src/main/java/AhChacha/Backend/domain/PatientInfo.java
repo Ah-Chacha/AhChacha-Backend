@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class PatientInfo extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Comment("체중")
