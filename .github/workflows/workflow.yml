@@ -93,11 +93,10 @@ jobs:
         id: deploy-dev
         if: contains(github.ref, 'develop') || contains(github.ref, 'main')
         with:
-          host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
-#          password : ${{ secrets.EC2_PASSWORD }}
-          port: ${{ secrets.EC2_PORT }}
+          host: ${{ secrets.EC2_HOST }}
           key: ${{ secrets.PRIVATE_KEY }}
+          port: ${{ secrets.EC2_PORT }}
           script: |
             sudo docker ps
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE }}
