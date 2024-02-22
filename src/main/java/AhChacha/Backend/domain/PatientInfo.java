@@ -12,11 +12,12 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "patient_info")
+@Table(name = "patientInfo")
 public class PatientInfo extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "patient_id")
     private Long id;
 
     @Comment("체중")
@@ -31,7 +32,7 @@ public class PatientInfo extends BaseTimeEntity {
     @Comment("휴대폰 번호")
     private String phoneNumber;
 
-    @OneToOne(mappedBy = "patient_info", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "patientInfo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Member member;
 
     @Builder

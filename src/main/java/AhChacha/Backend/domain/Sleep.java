@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class Sleep extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "sleep_id", nullable = false)
     private Long id;
 
     @Comment("수면 시작 시간")

@@ -19,6 +19,7 @@ public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
     private Long id;
 
     @Convert(converter = PlatformConverter.class)
@@ -39,7 +40,6 @@ public class Member extends BaseTimeEntity {
 
     private String profileImage = DEFAULT_PROFILE_ROOT;
 
-    @Setter
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id")
     private PatientInfo patientInfo;

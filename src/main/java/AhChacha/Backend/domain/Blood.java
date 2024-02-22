@@ -14,7 +14,7 @@ import org.hibernate.annotations.Comment;
 public class Blood extends BaseTimeEntity {
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "blood_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 

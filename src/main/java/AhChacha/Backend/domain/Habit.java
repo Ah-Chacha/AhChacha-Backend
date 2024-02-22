@@ -15,7 +15,7 @@ public class Habit extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "habit_id", nullable = false)
     private Long id;
 
     @Comment("예방 음식 섭취 개수 : 0개 이상 20개 이하")
