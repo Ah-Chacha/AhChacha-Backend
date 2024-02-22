@@ -39,7 +39,8 @@ public class Member extends BaseTimeEntity {
     private String profileImage = DEFAULT_PROFILE_ROOT;
 
     @Setter
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "pa")
     private PatientInfo patientInfo;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)

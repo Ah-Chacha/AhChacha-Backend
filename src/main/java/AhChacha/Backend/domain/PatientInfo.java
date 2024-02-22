@@ -31,8 +31,7 @@ public class PatientInfo extends BaseTimeEntity {
     @Comment("휴대폰 번호")
     private String phoneNumber;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @OneToOne(mappedBy = "patient_info", cascade = CascadeType.ALL)
     private Member member;
 
     @Builder
