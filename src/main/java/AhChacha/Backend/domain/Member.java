@@ -1,6 +1,7 @@
 package AhChacha.Backend.domain;
 
 import AhChacha.Backend.converter.PlatformConverter;
+import AhChacha.Backend.dto.member.request.MemberRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,7 +41,7 @@ public class Member extends BaseTimeEntity {
 
     @Setter
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "pa")
+    @JoinColumn(name = "patient_id")
     private PatientInfo patientInfo;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
@@ -80,6 +81,14 @@ public class Member extends BaseTimeEntity {
         return Member.builder()
                 .email(email)
                 .build();
+    }
+
+    public void updateMember(MemberRequest memberRequest) {
+        name = memberRequest.getName();
+        roleType = memberRequest.getRoleType();
+        email = memberRequest.getEmail();
+        status = memberRequest.getStatus();
+        profileImage = memberRequest.getProfileImage();
     }
 
 }
