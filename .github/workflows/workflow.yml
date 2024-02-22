@@ -92,7 +92,7 @@ jobs:
       - name: Deploy
         uses: appleboy/ssh-action@master
         id: deploy-dev
-        if: contains(github.ref, 'develop') || contains(github.ref, 'main')
+        if: contains(github.ref, 'develop') || contains(github.ref, 'main') || contains(github.ref, 'feat/ci-cd')
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
