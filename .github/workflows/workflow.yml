@@ -65,7 +65,8 @@ jobs:
       - name: make application.yml
         if: |
           contains(github.ref, 'main') ||
-          contains(github.ref, 'develop')
+          contains(github.ref, 'develop') || 
+          contains(github.ref, 'feat/ci-cd')
         run: |
           cd ./src/main/resources               # resources 폴더로 이동
           touch ./application.yml               # application.yml 생성
