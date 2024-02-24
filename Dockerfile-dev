@@ -1,17 +1,4 @@
-## 1. application build
-FROM amazoncorretto:17 AS build
-ENV APP_HOME=/app
-WORKDIR $APP_HOME
-
-COPY build.gradle settings.gradle gradlew $APP_HOME
-COPY gradle $APP_HOME/gradle
-COPY src $APP_HOME/src
-
-RUN chmod +x $APP_HOME/gradlew
-RUN $APP_HOME/gradlew bootJar
-
-## 2. docker image build (실행 환경 설정)
 FROM amazoncorretto:17
-COPY --from=build /app/build/libs/*.jar ./app.jar
-EXPOSE 8081
+EXPOSE 8080
+COPY ./build/libs/*.jar ./app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]

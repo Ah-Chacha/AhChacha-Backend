@@ -11,6 +11,7 @@ on:
     branches:
       - 'develop'
       - 'main'
+      - 'feat/ci-cd'
   pull_request:
     branches:
       - 'main'
@@ -64,7 +65,8 @@ jobs:
       - name: make application.yml
         if: |
           contains(github.ref, 'main') ||
-          contains(github.ref, 'develop')
+          contains(github.ref, 'develop') || 
+          contains(github.ref, 'feat/ci-cd')
         run: |
           cd ./src/main/resources               # resources 폴더로 이동
           touch ./application.yml               # application.yml 생성
@@ -91,20 +93,19 @@ jobs:
       - name: Deploy
         uses: appleboy/ssh-action@master
         id: deploy-dev
-        if: contains(github.ref, 'develop') || contains(github.ref, 'main')
+        if: contains(github.ref, 'develop') || contains(github.ref, 'main') || contains(github.ref, 'feat/ci-cd')
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
+          username: ec2-user   # ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          port: ${{ secrets.EC2_PORT }}
+          port: 22  # ${{ secrets.EC2_PORT }}
           envs: GITHUB_SHA
           script: |
             sudo docker rm -f $(docker ps -qa)
             sudo docker ps
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE }}
-            sudo docker run -d -p 8081:8081 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE }}
+            sudo docker run -d -p 8080:8080 --name ahchacha ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE }}
             sudo docker image prune -f
-            
 
 ############################################
 #      - name: Generate deployment package
