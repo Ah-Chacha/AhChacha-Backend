@@ -14,7 +14,7 @@ import org.hibernate.annotations.Comment;
 public class Habit extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "habit_id", nullable = false)
     private Long id;
 

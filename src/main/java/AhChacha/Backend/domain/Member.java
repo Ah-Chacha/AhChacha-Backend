@@ -56,6 +56,9 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Sleep> sleeps = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Chatting> chattings = new ArrayList<>();
+
     @Builder
     public Member(String name, String email, RoleType roleType) {
         this.name = name;

@@ -15,7 +15,7 @@ public class Blood extends BaseTimeEntity {
 
     @Id
     @Column(name = "blood_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Comment("수축기 혈압 : 40mmHg 이상 200mmHg 이하")
