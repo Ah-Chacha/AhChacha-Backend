@@ -13,7 +13,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @RequestMapping("/auth")
@@ -36,36 +39,29 @@ public class AuthController {
         //이거 안써여 모바일용
     }
 
-    /*@PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
-        return ResponseEntity.ok(memberService.login(loginRequest));
-    }*/
 
-
-
-    //추가정보 입력
+    // 추가정보 입력
     @PostMapping("/sign-up/{platform}/{id}")
-    public ResponseEntity<TokenResponse> signUp(@PathVariable("platform") Platform platform, @PathVariable("id") String id, @RequestBody @Valid SignUpRequest signUpRequest) throws Exception {
-        System.out.println("provider = " + platform);
-        System.out.println("id = " + id);
+    public ResponseEntity<TokenResponse> signUp(@PathVariable("platform") Platform platform,
+                                                @PathVariable("id") String id,
+                                                @RequestBody @Valid SignUpRequest signUpRequest) throws Exception {
+        log.info("[AuthController.signUp - post]");
         return ResponseEntity.ok(authService.signUp(signUpRequest, platform, id));
     }
 
 
+
     @GetMapping("/sign-up/{platform}/{id}")
-    public String signUp(@PathVariable("platform") Platform platform, @PathVariable("id") String id) throws Exception {
-        //memberService.signUp(signUpDto, provider, id);
-        System.out.println("provider = " + platform);
-        System.out.println("id = " + id);
-        TokenResponse tokenResponse;
+    public ModelAndView signUp(@PathVariable("platform") Platform platform,
+                         @PathVariable("id") String id) throws Exception {
+        log.info("[AuthController.signUp - get]");
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("redirect:/loginSuccess.html");
 
-        return "회원가입 성공";
+//        TokenResponse tokenResponse;
+
+        return mav;
     }
-
-
-    /*@PostMapping("/login")
-    public ResponseEntity<TokenDto> login()*/
-
 
     @PostMapping("/reissue")
     public ResponseEntity<TokenResponse> reissue(@RequestBody TokenRequest tokenRequest) {
