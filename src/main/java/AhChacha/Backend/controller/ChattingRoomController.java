@@ -5,9 +5,7 @@ import AhChacha.Backend.repository.RedisCacheRepository;
 import AhChacha.Backend.service.ChattingRoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +20,11 @@ public class ChattingRoomController {
     @GetMapping("/rooms")
     public List<ChattingRoom> chattingRooms() {
         return redisCacheRepository.findAllRooms();
+    }
+
+
+    @PostMapping("/room")
+    public ChattingRoom createRoom(@RequestBody String name) {
+        return redisCacheRepository.createChattingRoom(name);
     }
 }
