@@ -1,6 +1,7 @@
 package AhChacha.Backend.controller;
 
 import AhChacha.Backend.domain.ChattingRoom;
+import AhChacha.Backend.dto.chatting.ChattingRoomDto;
 import AhChacha.Backend.repository.RedisCacheRepository;
 import AhChacha.Backend.service.ChattingRoomService;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +19,13 @@ public class ChattingRoomController {
     private final RedisCacheRepository redisCacheRepository;
 
     @GetMapping("/rooms")
-    public List<ChattingRoom> chattingRooms() {
+    public List<ChattingRoomDto> chattingRooms() {
         return redisCacheRepository.findAllRooms();
     }
 
 
     @PostMapping("/room")
-    public ChattingRoom createRoom(@RequestBody String name) {
+    public ChattingRoomDto createRoom(@RequestBody String name) {
         return redisCacheRepository.createChattingRoom(name);
     }
 }

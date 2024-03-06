@@ -2,6 +2,7 @@ package AhChacha.Backend.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "chattingRoom")
-public class ChattingRoom {
+public class ChattingRoom extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,14 +22,24 @@ public class ChattingRoom {
     private Long id;
 
     private String roomName;
+    private String roomId; //직렬화한 ID를 Redis에 저장
 
     @OneToMany(mappedBy = "chatting", cascade = CascadeType.ALL)
     private List<Chatting> chattings = new ArrayList<>();
 
+    /*
     public static ChattingRoom create(String name) {
         ChattingRoom chattingRoom = new ChattingRoom();
         chattingRoom.roomName = name;
         return chattingRoom;
+    }
+    */
+
+
+    @Builder
+    public ChattingRoom(String roomName, String roomId) {
+        this.roomName = roomName;
+        this.roomId = roomId;
     }
 
 

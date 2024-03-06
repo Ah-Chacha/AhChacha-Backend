@@ -1,6 +1,7 @@
 package AhChacha.Backend.repository;
 
 import AhChacha.Backend.domain.ChattingRoom;
+import AhChacha.Backend.dto.chatting.ChattingRoomDto;
 import AhChacha.Backend.redis.RedisSubscriber;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class RedisCacheRepository {
 
     private final RedisTemplate<String, Object> redisTemplate;
     private static final String Room = "ChattingRoom";
-    private HashOperations<String, Long, ChattingRoom> opsHashChattingRoom;
+    private HashOperations<String, String, ChattingRoomDto> opsHashChattingRoom;
     //public interface HashOperations<H,HK,HV>  해쉬 이름, 키, 밸류
     private Map<String, ChannelTopic> topics;
 
@@ -34,14 +35,15 @@ public class RedisCacheRepository {
         opsHashChattingRoom = redisTemplate.opsForHash();
         topics = new HashMap<>();
     }
-    public List<ChattingRoom> findAllRooms() {
+    public List<ChattingRoomDto> findAllRooms() {
         return opsHashChattingRoom.values(Room);
     }
 
-    public ChattingRoom createChattingRoom(String name) {
-        ChattingRoom chattingRoom = ChattingRoom.create(name);
-        opsHashChattingRoom.put(Room, chattingRoom.getId(), chattingRoom);
-        return chattingRoom;
+    //채팅방 Redis에 저장 근데 Dto를 저장해야할듯
+    public ChattingRoomDto createChattingRoom(String name) {
+        ChattingRoomDto chattingRoomDto = ChattingRoomDto.create(name);
+        opsHashChattingRoom.put(Room, chattingRoomDto.getRoomId(), chattingRoomDto); //직렬화한 값을 저장해야함
+        return chattingRoomDto;
     }
 
     public void enterChattingRoom(String roomId) {
