@@ -1,6 +1,7 @@
 package AhChacha.Backend.redis;
 
 import AhChacha.Backend.domain.Message;
+import AhChacha.Backend.dto.chatting.MessageDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ public class RedisSubscriber implements MessageListener {
     public void onMessage(org.springframework.data.redis.connection.Message message, byte[] pattern) {
         try {
             String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
-            Message roomMessage = objectMapper.readValue(publishMessage, Message.class);
+            MessageDto roomMessage = objectMapper.readValue(publishMessage, MessageDto.class);
             simpMessageSendingOperations.convertAndSend("/sub/chat/room/" + roomMessage.getRoomId(), roomMessage);
         } catch (Exception e) {
             log.error(e.getMessage());

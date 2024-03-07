@@ -1,6 +1,7 @@
 package AhChacha.Backend.controller;
 
 import AhChacha.Backend.domain.Message;
+import AhChacha.Backend.dto.chatting.MessageDto;
 import AhChacha.Backend.redis.RedisPublisher;
 import AhChacha.Backend.repository.ChattingRoomRepository;
 import AhChacha.Backend.repository.RedisCacheRepository;
@@ -16,13 +17,13 @@ public class MessageController {
     private final RedisCacheRepository redisCacheRepository;
 
     @MessageMapping("/chat/message")
-    public void message(Message message) {
-        if (Message.MessageType.ENTER.equals(message.getType())) {
-            redisCacheRepository.enterChattingRoom(message.getRoomId());
-            //message.setMessage(message.getSender() + "님이 입장하셨습니다.");
+    public void message(MessageDto messageDto) {
+        if (Message.MessageType.ENTER.equals(messageDto.getType())) {
+            redisCacheRepository.enterChattingRoom(messageDto.getRoomId());
+            messageDto.setMessage(messageDto.getSender() + "님이 입장하셨습니다.");
             //setter처리
         }
 
-        redisPublisher.publish(redisCacheRepository.getTopic(message.getRoomId()), message);
+        redisPublisher.publish(redisCacheRepository.getTopic(messageDto.getRoomId()), messageDto);
     }
 }

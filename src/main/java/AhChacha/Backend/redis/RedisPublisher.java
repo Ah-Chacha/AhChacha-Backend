@@ -1,6 +1,7 @@
 package AhChacha.Backend.redis;
 
 import AhChacha.Backend.domain.Message;
+import AhChacha.Backend.dto.chatting.MessageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class RedisPublisher {
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public void publish(ChannelTopic topic, Message message) {
-        redisTemplate.convertAndSend(topic.getTopic(), message);
+    public void publish(ChannelTopic topic, MessageDto messageDto) {
+        redisTemplate.convertAndSend(topic.getTopic(), messageDto);
     }
 }
