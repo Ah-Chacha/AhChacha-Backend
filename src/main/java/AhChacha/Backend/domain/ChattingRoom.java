@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Entity
@@ -22,9 +21,9 @@ public class ChattingRoom extends BaseTimeEntity{
     private Long id;
 
     private String roomName;
-    private String roomId; //직렬화한 ID를 Redis에 저장
+    private String room_strid; //직렬화한 ID를 Redis에 저장
 
-    @OneToMany(mappedBy = "chatting", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chattingRoom", cascade = CascadeType.ALL)
     private List<Chatting> chattings = new ArrayList<>();
 
     /*
@@ -37,9 +36,9 @@ public class ChattingRoom extends BaseTimeEntity{
 
 
     @Builder
-    public ChattingRoom(String roomName, String roomId) {
+    public ChattingRoom(String roomName, String room_strid) {
         this.roomName = roomName;
-        this.roomId = roomId;
+        this.room_strid = room_strid;
     }
 
 

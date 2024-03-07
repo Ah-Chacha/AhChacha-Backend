@@ -3,12 +3,14 @@ package AhChacha.Backend.dto.chatting;
 import AhChacha.Backend.domain.ChattingRoom;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.UUID;
 
 @Getter
+@Setter
 public class ChattingRoomDto implements Serializable {
 
     @Serial
