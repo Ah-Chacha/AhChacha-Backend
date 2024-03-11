@@ -7,9 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="/css/nav-style.css">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-
-    <!--    <script src="/js/jquery-3.6.0.min.js"></script>-->
+<!--    <script src="/js/jquery-3.6.0.min.js"></script>-->
     <script src="https://kit.fontawesome.com/664b04d64e.js" crossorigin="anonymous"></script>
     <script src="main.js" defer></script>
 </head>
@@ -20,34 +18,20 @@
         <a href="/">아차차!</a>
     </div>
     <ul class="navbar_menu">
-        <li><a href="">기록 및 조회</a></li>
+        <li><a href="/loginSuccess.html">기록 및 조회</a></li>
         <li><a href="">통계</a></li>
         <li><a href="">간이 검사</a></li>
 
     </ul>
 
     <div class="navbar_user">
-        <li><i class="fa-solid fa-circle-user"></i></li>
+        <li><i class="fa-solid fa-circle-user fa-xl"></i></li>
         <li><a class="btn btn-lg btn-secondary" href="/member/me/{memberId}">회원 정보 수정</a></li>
     </div>
 
     <a href="#" class="navbar_toggleBtn">
-        <i class="fa-duotone fa-bars"></i>
+        <i class="fa-solid fa-bars" style="color: #63E6BE;"></i>
     </a>
 </nav>
-<th:block layout:fragment="content">
-    <div class="container">
-        <div th:replace="fragments/bodyHeader :: bodyHeader">
-            <div class="jumbotron">
-<!--                <h1>아차차!</h1>-->
-                <h2>당신의 소중한 기억들을 위해</h2>
-                <a class="btn btn-lg btn-secondary" href="/oauth2/authorization/kakao">카카오</a>
-                <a class="btn btn-lg btn-secondary" href="/oauth2/authorization/google">구글</a>
-                <a class="btn btn-lg btn-secondary" href="/oauth2/authorization/naver">네이버</a>
-            </div>
-        </div>
-    </div>
-</th:block>
 </body>
-
 </html>
