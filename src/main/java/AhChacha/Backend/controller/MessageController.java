@@ -16,12 +16,11 @@ public class MessageController {
     private final RedisPublisher redisPublisher;
     private final RedisCacheRepository redisCacheRepository;
 
-    @MessageMapping("/chat/message")
+    @MessageMapping("/chatting/message")
     public void message(MessageDto messageDto) {
         if (Message.MessageType.ENTER.equals(messageDto.getType())) {
             redisCacheRepository.enterChattingRoom(messageDto.getRoomId());
             messageDto.setMessage(messageDto.getSender() + "님이 입장하셨습니다.");
-            //setter처리
         }
 
         redisPublisher.publish(redisCacheRepository.getTopic(messageDto.getRoomId()), messageDto);

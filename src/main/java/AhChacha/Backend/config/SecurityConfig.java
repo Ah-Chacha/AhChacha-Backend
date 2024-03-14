@@ -71,6 +71,7 @@ public class SecurityConfig {
                         .requestMatchers(new MvcRequestMatcher(introspector, "/swagger-ui/**")).permitAll()
                         .requestMatchers(new MvcRequestMatcher(introspector, "/v3/api-docs/**")).permitAll()
                         .requestMatchers(new MvcRequestMatcher(introspector, "/*")).permitAll()
+                        .requestMatchers(new MvcRequestMatcher(introspector, "/chatting/**")).permitAll()  //임시 권한 부여
                         .anyRequest().authenticated()) // 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
                 //== 소셜 로그인 설정 ==//
                 .oauth2Login(oauth2 -> oauth2
