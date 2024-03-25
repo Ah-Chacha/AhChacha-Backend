@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "sleep")
 public class Sleep extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sleep_id", nullable = false)
     private Long id;
 
